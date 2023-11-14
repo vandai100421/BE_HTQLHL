@@ -43,7 +43,7 @@ namespace BTLQuanLy
 
             services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
             {
-                builder.WithOrigins("*");
+                builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
             }));
         }
 
