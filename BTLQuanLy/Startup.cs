@@ -40,6 +40,11 @@ namespace BTLQuanLy
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BTLQuanLy", Version = "v1" });
             });
+
+            services.AddCors(o => o.AddPolicy("MyPolicy", builder =>
+            {
+                builder.WithOrigins("*");
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +67,9 @@ namespace BTLQuanLy
             {
                 endpoints.MapControllers();
             });
+
+            app.UseCors("MyPolicy");
+            
         }
     }
 }
