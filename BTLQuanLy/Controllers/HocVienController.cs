@@ -39,9 +39,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                model.NgayTao = DateTime.Now;
-                _context.Add(model);
-                _context.SaveChanges();
+                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{model.TenHocVien}', '{model.NgaySinh}', {model.GioiTinh}, N'{model.QueQuan}', '{model.SoDienThoai}', '{DateTime.Now}', {model.IddonVi}");
                 return Ok(new
                 {
                     status = "success",
@@ -56,21 +54,14 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, HocVienModel model)
+        public IActionResult Update(int id, HocVien model)
         {
             try
             {
                 var hocVien = _context.HocViens.SingleOrDefault(x => x.IdhocVien == id);
                 if (hocVien != null)
                 {
-                    hocVien.TenHocVien = model.TenHocVien;
-                    hocVien.GioiTinh = model.GioiTinh;
-                    hocVien.NgaySinh = model.NgaySinh;
-                    hocVien.QueQuan = model.QueQuan;
-                    hocVien.SoDienThoai = model.SoDienThoai;
-                    hocVien.IddonVi = model.IddonVi;
-                    hocVien.NgaySua = DateTime.Now;
-                    _context.SaveChanges();
+                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{model.TenHocVien}', '{model.NgaySinh}', {model.GioiTinh}, N'{model.QueQuan}', '{model.SoDienThoai}', '{DateTime.Now}', {model.IddonVi}");
                     return Ok(new
                     {
                         status = "success",
