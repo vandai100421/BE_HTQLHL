@@ -1,5 +1,6 @@
 ﻿using BTLQuanLy.Data;
 using BTLQuanLy.Models;
+using BTLQuanLy.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,18 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var list = _context.DonViModels.FromSqlRaw("getAllDonVi").ToList();
+                var list = _context.DonVis.ToList();
+                foreach (DonVi item in list)
+                {
+                    if (item.DonViId == null)
+                    {
+                        return Ok(new
+                        {
+                            status = "success",
+                            data = item,
+                        });
+                    }
+                }
                 return Ok(new
                 {
                     status = "success",
@@ -39,40 +51,39 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(DonVi model)
+        public IActionResult Create(DonViRequest request)
         {
-            try
+            var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, '{DateTime.Now}'");
+            if (result == 1)
             {
-                model.NgayTao = DateTime.Now;
-                _context.Add(model);
-                _context.SaveChanges();
-                return Ok(new { 
-                    status= "success",
-                    data= model,
+                return Ok(new
+                {
+                    status = "success",
                     message = "Thêm đơn vị thành công"
                 });
             }
-            catch
+            else
             {
                 return BadRequest();
             }
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, DonVi model)
+        public IActionResult Update(int id, DonViRequest request)
         {
             try
             {
-                var donVi = _context.DonVis.SingleOrDefault(x => x.IddonVi == id);
+                var donVi = _context.DonVis.SingleOrDefault(x => x.Id == id);
                 if (donVi != null)
                 {
-                    donVi.TenDonVi = model.TenDonVi;
-                    donVi.NgayThanhLap = model.NgayThanhLap;
-                    donVi.IddonViCha = model.IddonViCha;
-                    donVi.IdloaiDv = model.IdloaiDv;
+                    donVi.TenDonVi = request.TenDonVi;
+                    donVi.NgayThanhLap = request.NgayThanhLap;
+                    donVi.DonViId = request.DonViId;
+                    donVi.LoaiDonViId = request.LoaiDonViId;
                     donVi.NgaySua = DateTime.Now;
                     _context.SaveChanges();
-                    return Ok(new {
+                    return Ok(new
+                    {
                         status = "success",
                         message = "Cập nhật đơn vị thành công"
                     });
@@ -93,7 +104,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var donVi = _context.DonVis.SingleOrDefault(x => x.IddonVi == id);
+                var donVi = _context.DonVis.SingleOrDefault(x => x.Id == id);
                 if (donVi != null)
                 {
                     _context.Remove(donVi);

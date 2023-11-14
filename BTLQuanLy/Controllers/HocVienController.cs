@@ -1,5 +1,8 @@
-﻿using BTLQuanLy.Data;
+﻿//using BTLQuanLy.Data;
+//using BTLQuanLy.Models;
+using BTLQuanLy.Data;
 using BTLQuanLy.Models;
+using BTLQuanLy.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -35,15 +38,15 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(HocVien model)
+        public IActionResult Create(HocVienRequest request)
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{model.TenHocVien}', '{model.NgaySinh}', {model.GioiTinh}, N'{model.QueQuan}', '{model.SoDienThoai}', '{DateTime.Now}', {model.IddonVi}");
+                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {request.DonViId}");
                 return Ok(new
                 {
                     status = "success",
-                    data = model,
+                    data = request,
                     message = "Thêm học viên thành công"
                 });
             }
@@ -54,14 +57,14 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, HocVien model)
+        public IActionResult Update(int id, HocVienRequest request)
         {
             try
             {
-                var hocVien = _context.HocViens.SingleOrDefault(x => x.IdhocVien == id);
+                var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
-                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{model.TenHocVien}', '{model.NgaySinh}', {model.GioiTinh}, N'{model.QueQuan}', '{model.SoDienThoai}', '{DateTime.Now}', {model.IddonVi}");
+                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {request.DonViId}");
                     return Ok(new
                     {
                         status = "success",
@@ -84,7 +87,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var hocVien = _context.HocViens.SingleOrDefault(x => x.IdhocVien == id);
+                var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
                     _context.Remove(hocVien);

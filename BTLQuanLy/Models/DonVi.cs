@@ -7,29 +7,19 @@ using System.Threading.Tasks;
 
 namespace BTLQuanLy.Models
 {
-    public class DonViModel
+    public class DonVi
     {
-        [Key]
-        [Column("IDDonVi")]
-        public int IddonVi { get; set; }
-        [StringLength(50)]
+        public int Id { get; set; }
         public string TenDonVi { get; set; }
-        [Column(TypeName = "date")]
         public DateTime? NgayThanhLap { get; set; }
-        [Column(TypeName = "date")]
         public DateTime? NgayGiaiTan { get; set; }
-        [Column("IDLoaiDV")]
-        public int? IdloaiDv { get; set; }
-        [Column("IDDonViCha")]
-        public int? IddonViCha { get; set; }
-        [Column(TypeName = "datetime")]
+        public int? DonViId { get; set; }
+        public int? LoaiDonViId { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
-        [Column(TypeName = "datetime")]
         public DateTime? NgaySua { get; set; }
         public int? NguoiSua { get; set; }
-        [Column("TenLoaiDV")]
-        [StringLength(50)]
-        public string TenLoaiDv { get; set; }
+        public List<DonVi> DonVis { get; set; }
+        public LoaiDonVi LoaiDonVi { get; set; }
     }
 }
