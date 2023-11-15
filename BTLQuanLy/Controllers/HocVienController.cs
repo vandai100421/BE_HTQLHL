@@ -28,7 +28,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var list = _context.HocViens.FromSqlRaw("getAllHocVien").ToList();
+                var list = _context.HocVienResponses.FromSqlRaw("getAllHocVien").ToList();
                 return Ok(new
                 {
                     status = "success",
@@ -106,6 +106,24 @@ namespace BTLQuanLy.Controllers
                 {
                     return NotFound();
                 }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery(Name = "q")] string q)
+        {
+            try
+            {
+                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien {q}").ToList();
+                return Ok(new
+                {
+                    status = "success",
+                    data = list
+                });
             }
             catch
             {

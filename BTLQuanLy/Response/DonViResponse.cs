@@ -19,5 +19,6 @@ namespace BTLQuanLy.Response
         public int? NguoiTao { get; set; }
         public DateTime? NgaySua { get; set; }
         public int? NguoiSua { get; set; }
+        public string TenLoaiDv { get; set; }
     }
 }

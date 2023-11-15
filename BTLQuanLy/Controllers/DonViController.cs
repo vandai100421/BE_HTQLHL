@@ -143,5 +143,23 @@ namespace BTLQuanLy.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery(Name = "q")] string q)
+        {
+            try
+            {
+                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi {q}").ToList();
+                return Ok(new
+                {
+                    status = "success",
+                    data = list
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }

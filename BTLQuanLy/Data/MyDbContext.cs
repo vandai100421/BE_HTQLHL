@@ -24,5 +24,7 @@ namespace BTLQuanLy.Data
         public virtual DbSet<LoaiDonVi> LoaiDonVis { get; set; }
 
         public virtual DbSet<DonViResponse> DonViResponses { get; set; }
+
+        public virtual DbSet<HocVienResponse> HocVienResponses { get; set; }
     }
 }
