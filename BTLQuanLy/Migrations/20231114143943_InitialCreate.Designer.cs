@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTLQuanLy.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231114092046_InitialCreate")]
+    [Migration("20231114143943_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,6 +38,9 @@ namespace BTLQuanLy.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("NgayThanhLap")

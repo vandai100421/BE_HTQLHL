@@ -29,7 +29,11 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.HocViens.FromSqlRaw("getAllHocVien").ToList();
-                return Ok(list);
+                return Ok(new
+                {
+                    status = "success",
+                    data = list
+                });
             }
             catch
             {

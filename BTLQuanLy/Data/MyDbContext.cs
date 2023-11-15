@@ -1,5 +1,6 @@
 ﻿using System;
 using BTLQuanLy.Models;
+using BTLQuanLy.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
@@ -22,5 +23,6 @@ namespace BTLQuanLy.Data
         public virtual DbSet<HocVien> HocViens { get; set; }
         public virtual DbSet<LoaiDonVi> LoaiDonVis { get; set; }
 
+        public virtual DbSet<DonViResponse> DonViResponses { get; set; }
     }
 }

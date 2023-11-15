@@ -33,11 +33,12 @@ namespace BTLQuanLy.Migrations
                     TenDonVi = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NgayThanhLap = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NgayGiaiTan = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DonViId = table.Column<int>(type: "int", nullable: true),
+                    LoaiDonViId = table.Column<int>(type: "int", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NguoiTao = table.Column<int>(type: "int", nullable: true),
                     NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    NguoiSua = table.Column<int>(type: "int", nullable: true),
-                    LoaiDonViId = table.Column<int>(type: "int", nullable: true),
-                    DonViId = table.Column<int>(type: "int", nullable: true)
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {

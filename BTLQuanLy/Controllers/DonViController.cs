@@ -50,6 +50,24 @@ namespace BTLQuanLy.Controllers
             }
         }
 
+        [HttpGet("list")]
+        public IActionResult GetAllList()
+        {
+            try
+            {
+                var list = _context.DonViResponses.FromSqlRaw("getAllDonVi").ToList();
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost]
         public IActionResult Create(DonViRequest request)
         {

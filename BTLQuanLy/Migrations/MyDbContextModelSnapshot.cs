@@ -38,6 +38,9 @@ namespace BTLQuanLy.Migrations
                     b.Property<DateTime?>("NgaySua")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("NgayThanhLap")
                         .HasColumnType("datetime2");
 
