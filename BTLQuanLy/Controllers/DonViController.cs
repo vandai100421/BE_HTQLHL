@@ -126,13 +126,19 @@ namespace BTLQuanLy.Controllers
                 var donVi = _context.DonVis.SingleOrDefault(x => x.Id == id);
                 if (donVi != null)
                 {
-                    _context.Remove(donVi);
-                    _context.SaveChanges();
-                    return Ok(new
+                    var result = _context.Database.ExecuteSqlRaw($"deleteDonVi {id}");
+                    if (result == 1)
                     {
-                        status = "success",
-                        message = "Xóa đơn vị thành công"
-                    });
+                        return Ok(new
+                        {
+                            status = "success",
+                            message = "Xóa đơn vị thành công"
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {
