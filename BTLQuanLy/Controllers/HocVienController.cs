@@ -24,11 +24,11 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll()
+        public IActionResult GetAll([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
-                var list = _context.HocVienResponses.FromSqlRaw("getAllHocVien").ToList();
+                var list = _context.HocVienResponses.FromSqlRaw($"getAllHocVien {limit}, {page}").ToList();
                 return Ok(new
                 {
                     status = "success",
@@ -114,11 +114,11 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromQuery(Name = "q")] string q)
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
-                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien {q}").ToList();
+                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien {q}, {limit}, {page}").ToList();
                 return Ok(new
                 {
                     status = "success",

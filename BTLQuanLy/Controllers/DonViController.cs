@@ -51,11 +51,11 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("list")]
-        public IActionResult GetAllList()
+        public IActionResult GetAllList([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
-                var list = _context.DonViResponses.FromSqlRaw("getAllDonVi").ToList();
+                var list = _context.DonViResponses.FromSqlRaw($"getAllDonVi {limit}, {page}").ToList();
                 return Ok(new
                 {
                     status = "success",
@@ -98,6 +98,7 @@ namespace BTLQuanLy.Controllers
                     donVi.NgayThanhLap = request.NgayThanhLap;
                     donVi.DonViId = request.DonViId;
                     donVi.LoaiDonViId = request.LoaiDonViId;
+                    donVi.TrangThai = request.TrangThai;
                     donVi.NgaySua = DateTime.Now;
                     _context.SaveChanges();
                     return Ok(new
@@ -145,11 +146,11 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromQuery(Name = "q")] string q)
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
-                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi {q}").ToList();
+                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi {q}, {limit}, {page}").ToList();
                 return Ok(new
                 {
                     status = "success",
