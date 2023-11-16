@@ -156,7 +156,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q}', {limit}, {page}").ToList();
+                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q??""}', {limit}, {page}").ToList();
                 return Ok(new
                 {
                     status = "success",
