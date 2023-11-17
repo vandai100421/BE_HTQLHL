@@ -71,16 +71,23 @@ namespace BTLQuanLy.Controllers
         [HttpPost]
         public IActionResult Create(DonViRequest request)
         {
-            var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, '{DateTime.Now}'");
-            if (result == 1)
+            try
             {
-                return Ok(new
+                var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai}, 0, '{DateTime.Now}'");
+                if (result == 1)
                 {
-                    status = "success",
-                    message = "Thêm đơn vị thành công"
-                });
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Thêm đơn vị thành công"
+                    });
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
-            else
+            catch
             {
                 return BadRequest();
             }
@@ -94,18 +101,19 @@ namespace BTLQuanLy.Controllers
                 var donVi = _context.DonVis.SingleOrDefault(x => x.Id == id);
                 if (donVi != null)
                 {
-                    donVi.TenDonVi = request.TenDonVi;
-                    donVi.NgayThanhLap = request.NgayThanhLap;
-                    donVi.DonViId = request.DonViId;
-                    donVi.LoaiDonViId = request.LoaiDonViId;
-                    donVi.TrangThai = request.TrangThai;
-                    donVi.NgaySua = DateTime.Now;
-                    _context.SaveChanges();
-                    return Ok(new
+                    var result = _context.Database.ExecuteSqlRaw($"updateDonViById {id}, N'{request.TenDonVi}', '{request.NgayThanhLap}', '{request.NgayGiaiTan}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai}, 0, '{DateTime.Now}'");
+                    if (result == 1)
                     {
-                        status = "success",
-                        message = "Cập nhật đơn vị thành công"
-                    });
+                        return Ok(new
+                        {
+                            status = "success",
+                            message = "Cập nhật đơn vị thành công"
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {

@@ -15,12 +15,12 @@ namespace BTLQuanLy.Models
         public DateTime? NgayGiaiTan { get; set; }
         public int? DonViId { get; set; }
         public int? LoaiDonViId { get; set; }
+        public int? CapDonViId { get; set; }
         public int? TrangThai { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
         public DateTime? NgaySua { get; set; }
         public int? NguoiSua { get; set; }
         public List<DonVi> DonVis { get; set; }
-        public LoaiDonVi LoaiDonVi { get; set; }
     }
 }

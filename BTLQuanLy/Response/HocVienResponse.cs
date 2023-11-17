@@ -17,13 +17,15 @@ namespace BTLQuanLy.Response
         public int? GioiTinh { get; set; }
         public string QueQuan { get; set; }
         public string SoDienThoai { get; set; }
-
+        public int? DonViId { get; set; }
+        public int? CapBacId { get; set; }
+        public int? ChucVuId { get; set; }
+        public string TenDonVi { get; set; }
+        public string TenCapBac { get; set; }
+        public string TenChucVu { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
         public DateTime? NgaySua { get; set; }
         public int? NguoiSua { get; set; }
-
-        public int? DonViId { get; set; }
-        public string TenDonVi { get; set; }
     }
 }

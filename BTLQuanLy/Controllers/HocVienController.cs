@@ -46,7 +46,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {request.DonViId}");
+                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}");
                 return Ok(new
                 {
                     status = "success",
@@ -68,7 +68,7 @@ namespace BTLQuanLy.Controllers
                 var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
-                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {request.DonViId}");
+                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}");
                     return Ok(new
                     {
                         status = "success",
@@ -94,13 +94,19 @@ namespace BTLQuanLy.Controllers
                 var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
-                    _context.Remove(hocVien);
-                    _context.SaveChanges();
-                    return Ok(new
+                    var result = _context.Database.ExecuteSqlRaw($"deleteHocVien {id}");
+                    if (result == 1)
                     {
-                        status = "success",
-                        message = "Xóa học viên thành công"
-                    });
+                        return Ok(new
+                        {
+                            status = "success",
+                            message = "Xóa học viên thành công"
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {
@@ -118,7 +124,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q??""}', {limit}, {page}").ToList();
+                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
                 return Ok(new
                 {
                     status = "success",

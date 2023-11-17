@@ -8,18 +8,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BTLQuanLy.Models
 {
-    public partial class HocVien
+    public partial class NguoiDung
     {
         public int Id { get; set; }
-        public string MaHocVien { get; set; }
-        public string TenHocVien { get; set; }
-        public DateTime? NgaySinh { get; set; }
-        public int? GioiTinh { get; set; }
-        public string QueQuan { get; set; }
-        public string SoDienThoai { get; set; }
-        public int? CapBacId { get; set; }
-        public int? ChucVuId { get; set; }
-        public int? DonViId { get; set; }
+        public string TenNguoiDung { get; set; }
+        public string HoTen { get; set; }
+        public string Email { get; set; }
+        public int VaiTro { get; set; }
+        public string MatKhau { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
         public DateTime? NgaySua { get; set; }

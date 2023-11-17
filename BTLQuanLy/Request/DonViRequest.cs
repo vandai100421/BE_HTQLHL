@@ -13,6 +13,7 @@ namespace BTLQuanLy.Request
         public DateTime? NgayThanhLap { get; set; }
         public DateTime? NgayGiaiTan { get; set; }
         public int? DonViId { get; set; }
+        public int? CapDonViId { get; set; }
         public int? LoaiDonViId { get; set; }
         public int? TrangThai { get; set; }
     }
