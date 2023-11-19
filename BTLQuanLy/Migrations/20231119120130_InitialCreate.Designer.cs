@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BTLQuanLy.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20231119014723_InitialCreate")]
+    [Migration("20231119120130_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -203,6 +203,39 @@ namespace BTLQuanLy.Migrations
                     b.ToTable("HocViens");
                 });
 
+            modelBuilder.Entity("BTLQuanLy.Models.KHHuanLuyen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Link")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("NguoiGui")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiSua")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiTao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenKeHoach")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("KHHuanLuyens");
+                });
+
             modelBuilder.Entity("BTLQuanLy.Models.LoaiDonVi", b =>
                 {
                     b.Property<int>("Id")
@@ -237,6 +270,9 @@ namespace BTLQuanLy.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("DonViId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -267,6 +303,228 @@ namespace BTLQuanLy.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("NguoiDungs");
+                });
+
+            modelBuilder.Entity("BTLQuanLy.Models.NhanKeHoach", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DonViId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("KeHoachId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("NguoiSua")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiTao")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NhanKeHoachs");
+                });
+
+            modelBuilder.Entity("BTLQuanLy.Models.TrangThietBi", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CapDo")
+                        .HasColumnType("int");
+
+                    b.Property<string>("DiaDiem")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("DonViId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MoTa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("NguoiSua")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiTao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenTTB")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TinhTrang")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TranThietBis");
+                });
+
+            modelBuilder.Entity("BTLQuanLy.Response.DonViResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CapDonViId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DonViId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LoaiDonViId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("NgayGiaiTan")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayThanhLap")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("NguoiSua")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiTao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenCapDv")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenDonVi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenLoaiDv")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TrangThai")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DonViResponses");
+                });
+
+            modelBuilder.Entity("BTLQuanLy.Response.HocVienResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("CapBacId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ChucVuId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DonViId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("GioiTinh")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaHocVien")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("NgaySinh")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("NguoiSua")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiTao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("QueQuan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SoDienThoai")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenCapBac")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenChucVu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenDonVi")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenHocVien")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HocVienResponses");
+                });
+
+            modelBuilder.Entity("BTLQuanLy.Response.NguoiDungResponse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DonViId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HoTen")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("NgaySua")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTao")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("NguoiSua")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("NguoiTao")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenNguoiDung")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("VaiTro")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NguoiDungResponses");
                 });
 
             modelBuilder.Entity("BTLQuanLy.Models.DonVi", b =>

@@ -76,6 +76,8 @@ namespace BTLQuanLy
 
             app.UseCors("MyPolicy");
 
+            app.UseStaticFiles();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

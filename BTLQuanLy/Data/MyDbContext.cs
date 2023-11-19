@@ -26,8 +26,13 @@ namespace BTLQuanLy.Data
         public virtual DbSet<CapBac> CapBacs { get; set; }
         public virtual DbSet<ChucVu> ChucVus { get; set; }
         public virtual DbSet<NguoiDung> NguoiDungs { get; set; }
+        public virtual DbSet<TrangThietBi> TrangThietBis { get; set; }
+        public virtual DbSet<KHHuanLuyen> KHHuanLuyens { get; set; }
+        public virtual DbSet<NhanKeHoach> NhanKeHoachs { get; set; }
         public virtual DbSet<DonViResponse> DonViResponses { get; set; }
         public virtual DbSet<HocVienResponse> HocVienResponses { get; set; }
         public virtual DbSet<NguoiDungResponse> NguoiDungResponses { get; set; }
+        public virtual DbSet<TrangThietBiResponse> TrangThietBiResponses { get; set; }
+        public virtual DbSet<KHHuanLuyenResponse> KHHuanLuyenResponses { get; set; }
     }
 }

@@ -15,5 +15,6 @@ namespace BTLQuanLy.Request
         public string Email { get; set; }
         public string MatKhau { get; set; }
         public int VaiTro { get; set; }
+        public int DonViId { get; set; }
     }
 }

@@ -60,6 +60,31 @@ namespace BTLQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "DonViResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenDonVi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayThanhLap = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NgayGiaiTan = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DonViId = table.Column<int>(type: "int", nullable: true),
+                    TenLoaiDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenCapDv = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LoaiDonViId = table.Column<int>(type: "int", nullable: true),
+                    CapDonViId = table.Column<int>(type: "int", nullable: true),
+                    TrangThai = table.Column<int>(type: "int", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonViResponses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "DonVis",
                 columns: table => new
                 {
@@ -89,6 +114,34 @@ namespace BTLQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "HocVienResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MaHocVien = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenHocVien = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgaySinh = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    GioiTinh = table.Column<int>(type: "int", nullable: true),
+                    QueQuan = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SoDienThoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonViId = table.Column<int>(type: "int", nullable: true),
+                    CapBacId = table.Column<int>(type: "int", nullable: true),
+                    ChucVuId = table.Column<int>(type: "int", nullable: true),
+                    TenDonVi = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenCapBac = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TenChucVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_HocVienResponses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "HocViens",
                 columns: table => new
                 {
@@ -114,6 +167,25 @@ namespace BTLQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "KHHuanLuyens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenKeHoach = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Link = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NguoiGui = table.Column<int>(type: "int", nullable: false),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_KHHuanLuyens", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LoaiDonVis",
                 columns: table => new
                 {
@@ -131,6 +203,27 @@ namespace BTLQuanLy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NguoiDungResponses",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenNguoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HoTen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VaiTro = table.Column<int>(type: "int", nullable: false),
+                    DonViId = table.Column<int>(type: "int", nullable: false),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NguoiDungResponses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "NguoiDungs",
                 columns: table => new
                 {
@@ -140,6 +233,7 @@ namespace BTLQuanLy.Migrations
                     HoTen = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     VaiTro = table.Column<int>(type: "int", nullable: false),
+                    DonViId = table.Column<int>(type: "int", nullable: false),
                     MatKhau = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NguoiTao = table.Column<int>(type: "int", nullable: true),
@@ -149,6 +243,46 @@ namespace BTLQuanLy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NguoiDungs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "NhanKeHoachs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    KeHoachId = table.Column<int>(type: "int", nullable: false),
+                    DonViId = table.Column<int>(type: "int", nullable: false),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NhanKeHoachs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TranThietBis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenTTB = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CapDo = table.Column<int>(type: "int", nullable: false),
+                    TinhTrang = table.Column<int>(type: "int", nullable: false),
+                    MoTa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DiaDiem = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DonViId = table.Column<int>(type: "int", nullable: false),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TranThietBis", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -169,16 +303,34 @@ namespace BTLQuanLy.Migrations
                 name: "ChucVus");
 
             migrationBuilder.DropTable(
+                name: "DonViResponses");
+
+            migrationBuilder.DropTable(
                 name: "DonVis");
+
+            migrationBuilder.DropTable(
+                name: "HocVienResponses");
 
             migrationBuilder.DropTable(
                 name: "HocViens");
 
             migrationBuilder.DropTable(
+                name: "KHHuanLuyens");
+
+            migrationBuilder.DropTable(
                 name: "LoaiDonVis");
 
             migrationBuilder.DropTable(
+                name: "NguoiDungResponses");
+
+            migrationBuilder.DropTable(
                 name: "NguoiDungs");
+
+            migrationBuilder.DropTable(
+                name: "NhanKeHoachs");
+
+            migrationBuilder.DropTable(
+                name: "TranThietBis");
         }
     }
 }
