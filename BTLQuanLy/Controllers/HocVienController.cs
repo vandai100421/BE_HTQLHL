@@ -119,22 +119,22 @@ namespace BTLQuanLy.Controllers
             }
         }
 
-        [HttpGet("search")]
-        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
-        {
-            try
-            {
-                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
-                return Ok(new
-                {
-                    status = "success",
-                    data = list
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
+        //[HttpGet("search")]
+        //public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
+        //{
+        //    try
+        //    {
+        //        var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
+        //        return Ok(new
+        //        {
+        //            status = "success",
+        //            data = list
+        //        });
+        //    }
+        //    catch
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
     }
 }

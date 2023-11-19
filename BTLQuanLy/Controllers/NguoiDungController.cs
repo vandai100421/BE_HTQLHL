@@ -21,22 +21,15 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
-            try
+            var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
+            return Ok(new
             {
-                var result = _context.NguoiDungResponses.ToList();
-                return Ok(new
-                {
-                    status = "success",
-                    data = result,
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+                status = "success",
+                data = list,
+            });
         }
 
         [HttpPost]

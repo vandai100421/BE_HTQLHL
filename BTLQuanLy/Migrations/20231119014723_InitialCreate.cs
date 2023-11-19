@@ -102,6 +102,7 @@ namespace BTLQuanLy.Migrations
                     SoDienThoai = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CapBacId = table.Column<int>(type: "int", nullable: true),
                     ChucVuId = table.Column<int>(type: "int", nullable: true),
+                    DonViId = table.Column<int>(type: "int", nullable: true),
                     NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     NguoiTao = table.Column<int>(type: "int", nullable: true),
                     NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -129,6 +130,27 @@ namespace BTLQuanLy.Migrations
                     table.PrimaryKey("PK_LoaiDonVis", x => x.Id);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "NguoiDungs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TenNguoiDung = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HoTen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    VaiTro = table.Column<int>(type: "int", nullable: false),
+                    MatKhau = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NgayTao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiTao = table.Column<int>(type: "int", nullable: true),
+                    NgaySua = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    NguoiSua = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NguoiDungs", x => x.Id);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_DonVis_DonViId",
                 table: "DonVis",
@@ -154,6 +176,9 @@ namespace BTLQuanLy.Migrations
 
             migrationBuilder.DropTable(
                 name: "LoaiDonVis");
+
+            migrationBuilder.DropTable(
+                name: "NguoiDungs");
         }
     }
 }
