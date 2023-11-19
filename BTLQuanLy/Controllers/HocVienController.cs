@@ -3,6 +3,7 @@
 using BTLQuanLy.Data;
 using BTLQuanLy.Models;
 using BTLQuanLy.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public IActionResult GetAll([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
@@ -42,6 +44,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(HocVienRequest request)
         {
             try
@@ -61,6 +64,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Update(int id, HocVienRequest request)
         {
             try
@@ -87,6 +91,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try
@@ -120,13 +125,14 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
                 var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
                 return Ok(new
-                {
+                {  
                     status = "success",
                     data = list
                 });

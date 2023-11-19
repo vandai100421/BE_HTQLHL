@@ -1,6 +1,7 @@
 ﻿using BTLQuanLy.Common;
 using BTLQuanLy.Data;
 using BTLQuanLy.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
@@ -51,6 +53,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Update(int id, NguoiDungRequest request)
         {
             try
@@ -87,6 +90,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try

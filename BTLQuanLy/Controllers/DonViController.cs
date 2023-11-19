@@ -1,6 +1,7 @@
 ﻿using BTLQuanLy.Data;
 using BTLQuanLy.Models;
 using BTLQuanLy.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "1")]
         public IActionResult GetAll()
         {
             try
@@ -51,6 +53,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("list")]
+        [Authorize]
         public IActionResult GetAllList([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
@@ -69,6 +72,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(DonViRequest request)
         {
             try
@@ -94,6 +98,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Update(int id, DonViRequest request)
         {
             try
@@ -127,6 +132,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try
@@ -159,22 +165,22 @@ namespace BTLQuanLy.Controllers
             }
         }
 
-        //[HttpGet("search")]
-        //public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
-        //{
-        //    try
-        //    {
-        //        var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q??""}', {limit}, {page}").ToList();
-        //        return Ok(new
-        //        {
-        //            status = "success",
-        //            data = list
-        //        });
-        //    }
-        //    catch
-        //    {
-        //        return BadRequest();
-        //    }
-        //}
+        [HttpGet("search")]
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
+        {
+            try
+            {
+                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q ?? ""}', {limit}, {page}").ToList();
+                return Ok(new
+                {
+                    status = "success",
+                    data = list
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
     }
 }
