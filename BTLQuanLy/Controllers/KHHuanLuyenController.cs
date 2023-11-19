@@ -46,7 +46,7 @@ namespace BTLQuanLy.Controllers
                 keHoach.NguoiGui = 0;
                 keHoach.NguoiTao = 0;
                 keHoach.NgayTao = DateTime.Now;
-                _context.Add(keHoach);
+                
                 foreach(var item in request.DonViIds)
                 {
                     var nhanKeHoach = new NhanKeHoach();
@@ -56,7 +56,6 @@ namespace BTLQuanLy.Controllers
                     nhanKeHoach.NgayTao = DateTime.Now;
                     _context.Add(nhanKeHoach);
                 }
-                _context.SaveChanges();
                 if (request.Link.Length > 0)
                 {
                     using(FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
@@ -64,7 +63,10 @@ namespace BTLQuanLy.Controllers
                         request.Link.CopyTo(filestream);
 
                     }
+                    keHoach.Link = "/public/" + request.Link.FileName;
                 }
+                _context.Add(keHoach);
+                _context.SaveChanges();
                 return Ok(new
                 {
                     status = "success",
@@ -78,7 +80,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult Update(int id, KHHuanLuyenRequest request)
+        public IActionResult Update(int id, [FromForm]KHHuanLuyenRequest request)
         {
             try
             {
@@ -89,6 +91,15 @@ namespace BTLQuanLy.Controllers
                     keHoach.NguoiGui = 0;
                     keHoach.NguoiSua = 0;
                     keHoach.NgaySua = DateTime.Now;
+                    if (request.Link.Length > 0)
+                    {
+                        using (FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
+                        {
+                            request.Link.CopyTo(filestream);
+
+                        }
+                        keHoach.Link = "/public/" + request.Link.FileName;
+                    }
                     _context.SaveChanges();
                     return Ok(new
                     {
