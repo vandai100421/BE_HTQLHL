@@ -23,7 +23,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
@@ -53,7 +53,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Update(int id, NguoiDungRequest request)
         {
             try
@@ -90,7 +90,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Delete(int id)
         {
             try

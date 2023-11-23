@@ -25,7 +25,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetAll([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
@@ -44,7 +44,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IActionResult Create(HocVienRequest request)
         {
             try
@@ -64,7 +64,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Update(int id, HocVienRequest request)
         {
             try
@@ -91,7 +91,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Delete(int id)
         {
             try
@@ -125,7 +125,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try

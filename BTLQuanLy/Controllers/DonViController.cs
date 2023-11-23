@@ -23,7 +23,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "1")]
+        //[Authorize(Roles = "1")]
         public IActionResult GetAll()
         {
             try
@@ -53,7 +53,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("list")]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetAllList([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
@@ -72,7 +72,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public IActionResult Create(DonViRequest request)
         {
             try
@@ -98,7 +98,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Update(int id, DonViRequest request)
         {
             try
@@ -132,7 +132,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Delete(int id)
         {
             try
