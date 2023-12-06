@@ -26,12 +26,19 @@ namespace BTLQuanLy.Controllers
         //[Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
-            var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
-            return Ok(new
+            try
             {
-                status = "success",
-                data = list,
-            });
+                var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]

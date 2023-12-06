@@ -14,8 +14,8 @@ namespace BTLQuanLy.Models
         public string TenNguoiDung { get; set; }
         public string HoTen { get; set; }
         public string Email { get; set; }
-        public int VaiTro { get; set; }
-        public int DonViId { get; set; }
+        public int? VaiTro { get; set; }
+        public int? DonViId { get; set; }
         public string MatKhau { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
