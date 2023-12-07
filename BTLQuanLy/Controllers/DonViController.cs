@@ -171,10 +171,14 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q ?? ""}', {limit}, {page}").ToList();
+                var total = _context.DonVis.Count();
                 return Ok(new
                 {
                     status = "success",
-                    data = list
+                    data = list,
+                    page,
+                    limit,
+                    total
                 });
             }
             catch

@@ -29,10 +29,14 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
+                var total = _context.NguoiDungs.Count();
                 return Ok(new
                 {
                     status = "success",
                     data = list,
+                    page,
+                    limit,
+                    total
                 });
             }
             catch

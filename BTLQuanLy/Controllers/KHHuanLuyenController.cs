@@ -29,10 +29,14 @@ namespace BTLQuanLy.Controllers
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach N'{q ?? ""}', {limit}, {page}").ToList();
+            var total = _context.KHHuanLuyens.Count();
             return Ok(new
             {
                 status = "success",
                 data = list,
+                page,
+                limit,
+                total
             });
         }
 
