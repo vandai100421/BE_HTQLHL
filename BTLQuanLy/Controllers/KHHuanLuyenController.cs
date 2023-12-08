@@ -27,28 +27,36 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("getOfUser")]
+        [Authorize]
         public IActionResult GetOfUser([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachOfDonVi N'{q ?? ""}', {limit}, {page}, {user.DonViId}").ToList();
-            var total = _context.KHHuanLuyens.Count();
-            return Ok(new
+            try
             {
-                status = "success",
-                data = list,
-                page,
-                limit,
-                total
-            });
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
+                var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachOfDonVi N'{q ?? ""}', {limit}, {page}, {user.DonViId}").ToList();
+                var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKeHoachOfDonVi N'{q ?? ""}', {user.DonViId}").ToList()[0].Total;
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("search")]
-        [Authorize]
+        //[Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach N'{q ?? ""}', {limit}, {page}").ToList();
-            var total = _context.KHHuanLuyens.Count();
+            var total = _context.KHHuanLuyens.Where(x => EF.Functions.Like(x.TenKeHoach, $"%{q ?? ""}%")).Count();
             return Ok(new
             {
                 status = "success",

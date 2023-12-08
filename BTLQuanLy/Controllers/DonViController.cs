@@ -171,7 +171,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.DonVis.Count();
+                var total = _context.DonVis.Where(x => EF.Functions.Like(x.TenDonVi, $"%{q ?? ""}%")).Count();
                 return Ok(new
                 {
                     status = "success",

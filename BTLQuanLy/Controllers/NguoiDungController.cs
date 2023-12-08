@@ -29,7 +29,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.NguoiDungResponses.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.NguoiDungs.Count();
+                var total = _context.NguoiDungs.Where(x => EF.Functions.Like(x.TenNguoiDung, $"%{q ?? ""}%")).Count();
                 return Ok(new
                 {
                     status = "success",

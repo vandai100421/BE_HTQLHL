@@ -27,7 +27,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.TrangThietBis.Count();
+                var total = _context.TrangThietBis.Where(x => EF.Functions.Like(x.TenTTB, $"%{q ?? ""}%")).Count();
                 return Ok(new
                 {
                     status = "success",

@@ -131,7 +131,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = list.Count();
+                var total = _context.HocViens.Where(x => EF.Functions.Like(x.TenHocVien, $"%{q ?? ""}%")).Count();
                 return Ok(new
                 {  
                     status = "success",

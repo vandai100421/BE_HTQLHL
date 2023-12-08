@@ -10,7 +10,6 @@ namespace BTLQuanLy.Request
 {
     public class KHHuanLuyenRequest
     {
-        public int Id { get; set; }
         public string TenKeHoach { get; set; }
         public IFormFile Link { get; set; }
         public int NguoiGui { get; set; }

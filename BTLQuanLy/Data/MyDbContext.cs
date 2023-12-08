@@ -34,5 +34,6 @@ namespace BTLQuanLy.Data
         public virtual DbSet<NguoiDungResponse> NguoiDungResponses { get; set; }
         public virtual DbSet<TrangThietBiResponse> TrangThietBiResponses { get; set; }
         public virtual DbSet<KHHuanLuyenResponse> KHHuanLuyenResponses { get; set; }
+        public virtual DbSet<TotalKHResponse> TotalKHResponses { get; set; }
     }
 }
