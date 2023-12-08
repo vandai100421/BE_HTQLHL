@@ -24,16 +24,23 @@ namespace BTLQuanLy.Controllers
         [HttpGet("search")]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
-            var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList();
-            var total = _context.TrangThietBis.Count();
-            return Ok(new
+            try
             {
-                status = "success",
-                data = list,
-                page,
-                limit,
-                total
-            });
+                var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList();
+                var total = _context.TrangThietBis.Count();
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]

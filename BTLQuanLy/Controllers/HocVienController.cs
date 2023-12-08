@@ -131,7 +131,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.HocViens.Count();
+                var total = list.Count();
                 return Ok(new
                 {  
                     status = "success",

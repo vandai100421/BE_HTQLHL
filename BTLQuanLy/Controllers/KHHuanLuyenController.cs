@@ -1,6 +1,7 @@
 ﻿using BTLQuanLy.Data;
 using BTLQuanLy.Models;
 using BTLQuanLy.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,25 @@ namespace BTLQuanLy.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [HttpGet("getOfUser")]
+        public IActionResult GetOfUser([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachOfDonVi N'{q ?? ""}', {limit}, {page}, {user.DonViId}").ToList();
+            var total = _context.KHHuanLuyens.Count();
+            return Ok(new
+            {
+                status = "success",
+                data = list,
+                page,
+                limit,
+                total
+            });
+        }
+
         [HttpGet("search")]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach N'{q ?? ""}', {limit}, {page}").ToList();

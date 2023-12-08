@@ -28,7 +28,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var list = _context.NguoiDungs.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
+                var list = _context.NguoiDungResponses.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
                 var total = _context.NguoiDungs.Count();
                 return Ok(new
                 {
@@ -50,7 +50,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, N'{Encryptor.MD5Hash(request.MatKhau)}', 0, '{DateTime.Now}'");
+                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
                 return Ok(new
                 {
                     status = "success",
