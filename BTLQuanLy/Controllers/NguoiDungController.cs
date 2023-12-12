@@ -26,23 +26,16 @@ namespace BTLQuanLy.Controllers
         //[Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
-            try
+            var list = _context.NguoiDungResponses.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
+            var total = _context.NguoiDungs.Where(x => EF.Functions.Like(x.TenNguoiDung, $"%{q ?? ""}%")).Count();
+            return Ok(new
             {
-                var list = _context.NguoiDungResponses.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.NguoiDungs.Where(x => EF.Functions.Like(x.TenNguoiDung, $"%{q ?? ""}%")).Count();
-                return Ok(new
-                {
-                    status = "success",
-                    data = list,
-                    page,
-                    limit,
-                    total
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
+                status = "success",
+                data = list,
+                page,
+                limit,
+                total
+            });
         }
 
         [HttpPost]
