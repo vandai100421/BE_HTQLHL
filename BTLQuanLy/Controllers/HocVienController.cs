@@ -49,7 +49,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}");
+                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
                 return Ok(new
                 {
                     status = "success",
@@ -72,7 +72,7 @@ namespace BTLQuanLy.Controllers
                 var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
-                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}");
+                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
                     return Ok(new
                     {
                         status = "success",

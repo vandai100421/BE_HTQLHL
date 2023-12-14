@@ -43,7 +43,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
+                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.NhomNDId}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
                 return Ok(new
                 {
                     status = "success",
@@ -62,7 +62,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"updateNguoiDungById {id}, N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, 0, '{DateTime.Now}'");
+                var result = _context.Database.ExecuteSqlRaw($"updateNguoiDungById {id}, N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.NhomNDId}, 0, '{DateTime.Now}'");
                 return Ok(new
                 {
                     status = "success",

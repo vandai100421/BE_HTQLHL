@@ -23,6 +23,10 @@ namespace BTLQuanLy.Response
         public string TenDonVi { get; set; }
         public string TenCapBac { get; set; }
         public string TenChucVu { get; set; }
+        public int? KhoaHoc { get; set; }
+        public DateTime? ThoiGianBatDau { get; set; }
+        public DateTime? ThoiGianKetThuc { get; set; }
+        public int? LoaiHocVien { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
         public DateTime? NgaySua { get; set; }

@@ -15,6 +15,10 @@ namespace BTLQuanLy.Models
         public string TenHocVien { get; set; }
         public DateTime? NgaySinh { get; set; }
         public int? GioiTinh { get; set; }
+        public int? KhoaHoc { get; set; }
+        public DateTime? ThoiGianBatDau { get; set; }
+        public DateTime? ThoiGianKetThuc { get; set; }
+        public int? LoaiHocVien { get; set; }
         public string QueQuan { get; set; }
         public string SoDienThoai { get; set; }
         public int? CapBacId { get; set; }

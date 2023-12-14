@@ -26,14 +26,43 @@ namespace BTLQuanLy.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
+        [HttpGet("News")]
+        [Authorize]
+        public IActionResult GetNews()
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"getKeHoachNews {user.DonViId}").ToList();
+            return Ok(new
+            {
+                status = "success",
+                data = list,
+            });
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetById(int id)
+        {
+            var list1 = _context.KHHuanLuyenResponses.FromSqlRaw($"getKeHoachById {id}").ToList();
+            var list2 = _context.NhanKeHoachResponses.FromSqlRaw($"getNhanKeHoach {id}").ToList();
+            return Ok(new
+            {
+                status = "success",
+                data = new { 
+                    KeHoach= list1.Count > 0 ? list1[0] : null,
+                    NhanKeHoach=list2
+                },
+            });
+        }
+
         [HttpGet("getOfUser")]
         [Authorize]
         public IActionResult GetOfUser([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachOfDonVi N'{q ?? ""}', {limit}, {page}, {user.DonViId}").ToList();
-            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKeHoachOfDonVi N'{q ?? ""}', {user.DonViId}").ToList()[0].Total;
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachOfDonVi N'{q ?? ""}', {limit}, {page}, {user.Id}, {user.DonViId}").ToList();
+            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKeHoachOfDonVi N'{q ?? ""}', {user.Id}, {user.DonViId}").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",
@@ -46,9 +75,9 @@ namespace BTLQuanLy.Controllers
 
         [HttpGet("search")]
         //[Authorize]
-        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach N'{q ?? ""}', {limit}, {page}").ToList();
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach N'{q ?? ""}', {limit}, {page}, '{startDay??"0"}', '{endDay??"0"}'").ToList();
             var total = _context.KHHuanLuyens.Where(x => EF.Functions.Like(x.TenKeHoach, $"%{q ?? ""}%")).Count();
             return Ok(new
             {
@@ -67,7 +96,9 @@ namespace BTLQuanLy.Controllers
             {
                 var keHoach = new KHHuanLuyen();
                 keHoach.TenKeHoach = request.TenKeHoach;
-                keHoach.NguoiGui = 0;
+                keHoach.MoTa = request.MoTa;
+                keHoach.NgayApDung = request.NgayApDung;
+                keHoach.NguoiLap = 0;
                 keHoach.NguoiTao = 0;
                 keHoach.NgayTao = DateTime.Now;
                 
@@ -112,7 +143,9 @@ namespace BTLQuanLy.Controllers
                 if (keHoach != null)
                 {
                     keHoach.TenKeHoach = request.TenKeHoach;
-                    keHoach.NguoiGui = 0;
+                    keHoach.MoTa = request.MoTa;
+                    keHoach.NgayApDung = request.NgayApDung;
+                    keHoach.NguoiLap = 0;
                     keHoach.NguoiSua = 0;
                     keHoach.NgaySua = DateTime.Now;
                     if (request.Link.Length > 0)

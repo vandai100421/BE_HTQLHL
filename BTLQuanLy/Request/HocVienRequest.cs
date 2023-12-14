@@ -19,5 +19,9 @@ namespace BTLQuanLy.Request
         public int? ChucVuId { get; set; }
         public string QueQuan { get; set; }
         public string SoDienThoai { get; set; }
+        public int? KhoaHoc { get; set; }
+        public DateTime? ThoiGianBatDau { get; set; }
+        public DateTime? ThoiGianKetThuc { get; set; }
+        public int? LoaiHocVien { get; set; }
     }
 }
