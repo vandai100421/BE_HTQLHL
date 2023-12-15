@@ -22,13 +22,13 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpGet("GetAllById/{id}")]
+        [HttpGet()]
         //[Authorize(Roles = "1")]
-        public IActionResult GetAllById(int id)
+        public IActionResult GetAll()
         {
             try
             {
-                var list = _context.DonVis.FromSqlRaw($"getAllDonViById {id}").ToList()[0];
+                var list = _context.DonVis.FromSqlRaw($"getAllDonViById 1").ToList()[0];
                 return Ok(new
                 {
                     status = "success",
@@ -136,7 +136,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "donViId")] int donViId)
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "donViId")] int donViId=0)
         {
             try
             {
