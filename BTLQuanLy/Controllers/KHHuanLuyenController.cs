@@ -45,7 +45,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("searchLevelYourself")]
-        //[Authorize]
+        [Authorize]
         public IActionResult SearchLevelYourself([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
@@ -63,7 +63,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("searchLevelLower")]
-        //[Authorize]
+        [Authorize]
         public IActionResult SearchLevelLower([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;

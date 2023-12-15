@@ -44,12 +44,19 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var user = _context.NguoiDungs.SingleOrDefault(x => x.Email == request.Email);
-                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
-                return Ok(new
+                if (user == null)
                 {
-                    status = "success",
-                    message = "Thêm người dùng thành công",
-                });
+                    var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Thêm người dùng thành công",
+                    });
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch
             {
