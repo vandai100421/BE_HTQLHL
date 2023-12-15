@@ -11,7 +11,7 @@ namespace BTLQuanLy.Request
     public class KHHuanLuyenRequest
     {
         public string TenKeHoach { get; set; }
-        public IFormFile Link { get; set; }
+        public IFormFile? Link { get; set; }
         public string NoiDung { get; set; }
         public int? DonViId { get; set; }
         public int? SoBuoiHoc { get; set; }

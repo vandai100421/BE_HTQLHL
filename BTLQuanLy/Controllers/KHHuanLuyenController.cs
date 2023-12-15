@@ -85,15 +85,16 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                if (request.Link.Length > 0)
+                var link = "0";
+                if (request.Link !=null && request.Link.Length > 0)
                 {
                     using(FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
                     {
                         request.Link.CopyTo(filestream);
-
+                        link = "/public/" + request.Link.FileName;
                     }
                 }
-                var result = _context.Database.ExecuteSqlRaw($"createKeHoach N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{"/public/" + request.Link.FileName}', {request.SoBuoiHoc}, {request.SoGio}, {request.DonViId}");
+                var result = _context.Database.ExecuteSqlRaw($"createKeHoach N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{link}', {request.SoBuoiHoc}, {request.SoGio}, {request.DonViId}");
                 _context.Database.ExecuteSqlRaw($"createBuoiHoc '{DateTime.Now}', 0");
                 return Ok(new
                 {
@@ -115,15 +116,16 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
-                    if (request.Link.Length > 0)
+                    var link = "0";
+                    if (request.Link != null && request.Link.Length > 0)
                     {
                         using (FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
                         {
                             request.Link.CopyTo(filestream);
-
+                            link = "/public/" + request.Link.FileName;
                         }
                     }
-                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{"/public/" + request.Link.FileName}'");
+                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{link}'");
                     return Ok(new
                     {
                         status = "success",
