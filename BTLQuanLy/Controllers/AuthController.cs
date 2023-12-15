@@ -39,7 +39,7 @@ namespace BTLQuanLy.Controllers
                 {
                     new Claim("userId", nguoiDung.Id.ToString()),
                     new Claim("userName", nguoiDung.TenNguoiDung),
-                    new Claim(ClaimTypes.Role, nguoiDung.NhomNDId.ToString()),
+                    new Claim(ClaimTypes.Role, nguoiDung.VaiTro.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(60),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(secretKeyBytes), SecurityAlgorithms.HmacSha256Signature)

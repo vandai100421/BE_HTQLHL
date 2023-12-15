@@ -12,9 +12,11 @@ namespace BTLQuanLy.Request
     {
         public string TenKeHoach { get; set; }
         public IFormFile Link { get; set; }
-        public string MoTa { get; set; }
-        public int NguoiGui { get; set; }
-        public List<int> DonViIds { get; set; }
-        public DateTime? NgayApDung { get; set; }
+        public string NoiDung { get; set; }
+        public int? DonViId { get; set; }
+        public int? SoBuoiHoc { get; set; }
+        public int? SoGio { get; set; }
+        public DateTime? ThoiGianBatDau { get; set; }
+        public DateTime? ThoiGianKetThuc { get; set; }
     }
 }

@@ -22,43 +22,13 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpGet]
+        [HttpGet("GetAllById/{id}")]
         //[Authorize(Roles = "1")]
-        public IActionResult GetAll()
+        public IActionResult GetAllById(int id)
         {
             try
             {
-                var list = _context.DonVis.ToList();
-                foreach (DonVi item in list)
-                {
-                    if (item.DonViId == null)
-                    {
-                        return Ok(new
-                        {
-                            status = "success",
-                            data = item,
-                        });
-                    }
-                }
-                return Ok(new
-                {
-                    status = "success",
-                    data = list,
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("list")]
-        //[Authorize]
-        public IActionResult GetAllList([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
-        {
-            try
-            {
-                var list = _context.DonViResponses.FromSqlRaw($"getAllDonVi {limit}, {page}").ToList();
+                var list = _context.DonVis.FromSqlRaw($"getAllDonViById {id}").ToList()[0];
                 return Ok(new
                 {
                     status = "success",
@@ -166,12 +136,12 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "donViId")] int donViId)
         {
             try
             {
-                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.DonVis.Where(x => EF.Functions.Like(x.TenDonVi, $"%{q ?? ""}%")).Count();
+                var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList();
+                var total = _context.TotalDonViResponses.FromSqlRaw($"getToTalDonVi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList()[0].Total;
                 return Ok(new
                 {
                     status = "success",

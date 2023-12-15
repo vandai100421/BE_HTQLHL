@@ -26,43 +26,14 @@ namespace BTLQuanLy.Controllers
             _webHostEnvironment = webHostEnvironment;
         }
 
-        [HttpGet("News")]
+        [HttpGet("searchLevelUpper")]
         [Authorize]
-        public IActionResult GetNews()
+        public IActionResult SearchLevelUpper([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"getKeHoachNews {user.DonViId}").ToList();
-            return Ok(new
-            {
-                status = "success",
-                data = list,
-            });
-        }
-
-        [HttpGet("{id}")]
-        public IActionResult GetById(int id)
-        {
-            var list1 = _context.KHHuanLuyenResponses.FromSqlRaw($"getKeHoachById {id}").ToList();
-            var list2 = _context.NhanKeHoachResponses.FromSqlRaw($"getNhanKeHoach {id}").ToList();
-            return Ok(new
-            {
-                status = "success",
-                data = new { 
-                    KeHoach= list1.Count > 0 ? list1[0] : null,
-                    NhanKeHoach=list2
-                },
-            });
-        }
-
-        [HttpGet("getOfUser")]
-        [Authorize]
-        public IActionResult GetOfUser([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
-        {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachOfDonVi N'{q ?? ""}', {limit}, {page}, {user.Id}, {user.DonViId}").ToList();
-            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKeHoachOfDonVi N'{q ?? ""}', {user.Id}, {user.DonViId}").ToList()[0].Total;
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay??"0"}', '{endDay??"0"}'").ToList();
+            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKHCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",
@@ -73,12 +44,32 @@ namespace BTLQuanLy.Controllers
             });
         }
 
-        [HttpGet("search")]
+        [HttpGet("searchLevelYourself")]
         //[Authorize]
-        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
+        public IActionResult SearchLevelYourself([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach N'{q ?? ""}', {limit}, {page}, '{startDay??"0"}', '{endDay??"0"}'").ToList();
-            var total = _context.KHHuanLuyens.Where(x => EF.Functions.Like(x.TenKeHoach, $"%{q ?? ""}%")).Count();
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
+            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKHCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+            return Ok(new
+            {
+                status = "success",
+                data = list,
+                page,
+                limit,
+                total
+            });
+        }
+
+        [HttpGet("searchLevelLower")]
+        //[Authorize]
+        public IActionResult SearchLevelLower([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
+        {
+            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
+            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
+            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKHCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",
@@ -94,23 +85,6 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var keHoach = new KHHuanLuyen();
-                keHoach.TenKeHoach = request.TenKeHoach;
-                keHoach.MoTa = request.MoTa;
-                keHoach.NgayApDung = request.NgayApDung;
-                keHoach.NguoiLap = 0;
-                keHoach.NguoiTao = 0;
-                keHoach.NgayTao = DateTime.Now;
-                
-                foreach(var item in request.DonViIds)
-                {
-                    var nhanKeHoach = new NhanKeHoach();
-                    nhanKeHoach.KeHoachId = keHoach.Id;
-                    nhanKeHoach.DonViId = item;
-                    nhanKeHoach.NguoiTao = 0;
-                    nhanKeHoach.NgayTao = DateTime.Now;
-                    _context.Add(nhanKeHoach);
-                }
                 if (request.Link.Length > 0)
                 {
                     using(FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
@@ -118,10 +92,9 @@ namespace BTLQuanLy.Controllers
                         request.Link.CopyTo(filestream);
 
                     }
-                    keHoach.Link = "/public/" + request.Link.FileName;
                 }
-                _context.Add(keHoach);
-                _context.SaveChanges();
+                var result = _context.Database.ExecuteSqlRaw($"createKeHoach N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{"/public/" + request.Link.FileName}', {request.SoBuoiHoc}, {request.SoGio}, {request.DonViId}");
+                _context.Database.ExecuteSqlRaw($"createBuoiHoc '{DateTime.Now}', 0");
                 return Ok(new
                 {
                     status = "success",
@@ -142,12 +115,6 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
-                    keHoach.TenKeHoach = request.TenKeHoach;
-                    keHoach.MoTa = request.MoTa;
-                    keHoach.NgayApDung = request.NgayApDung;
-                    keHoach.NguoiLap = 0;
-                    keHoach.NguoiSua = 0;
-                    keHoach.NgaySua = DateTime.Now;
                     if (request.Link.Length > 0)
                     {
                         using (FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
@@ -155,9 +122,8 @@ namespace BTLQuanLy.Controllers
                             request.Link.CopyTo(filestream);
 
                         }
-                        keHoach.Link = "/public/" + request.Link.FileName;
                     }
-                    _context.SaveChanges();
+                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{"/public/" + request.Link.FileName}'");
                     return Ok(new
                     {
                         status = "success",
@@ -184,13 +150,19 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
-                    _context.Remove(keHoach);
-                    _context.SaveChanges();
-                    return Ok(new
+                    var result = _context.Database.ExecuteSqlRaw($"deleteKeHoach {id}");
+                    if (result == 1)
                     {
-                        status = "success",
-                        message = "Xóa kế hoạch thành công"
-                    });
+                        return Ok(new
+                        {
+                            status = "success",
+                            message = "Xóa học viên thành công"
+                        });
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
                 }
                 else
                 {

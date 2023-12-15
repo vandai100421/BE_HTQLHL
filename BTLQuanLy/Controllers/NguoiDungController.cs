@@ -27,7 +27,7 @@ namespace BTLQuanLy.Controllers
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.NguoiDungResponses.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
-            var total = _context.NguoiDungs.Where(x => EF.Functions.Like(x.TenNguoiDung, $"%{q ?? ""}%")).Count();
+            var total = _context.TotalNguoiDungResponses.FromSqlRaw($"getTotalNguoiDung N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",
@@ -43,7 +43,8 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.NhomNDId}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
+                var user = _context.NguoiDungs.SingleOrDefault(x => x.Email == request.Email);
+                var result = _context.Database.ExecuteSqlRaw($"createNguoiDung N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, N'{Encryptor.MD5Hash(request.MatKhau)}', {request.DonViId}, 0, '{DateTime.Now}'");
                 return Ok(new
                 {
                     status = "success",
@@ -62,7 +63,7 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"updateNguoiDungById {id}, N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.NhomNDId}, 0, '{DateTime.Now}'");
+                var result = _context.Database.ExecuteSqlRaw($"updateNguoiDungById {id}, N'{request.TenNguoiDung}', N'{request.HoTen}', N'{request.Email}', {request.VaiTro}, {request.DonViId}, 0, '{DateTime.Now}'");
                 return Ok(new
                 {
                     status = "success",
@@ -102,8 +103,7 @@ namespace BTLQuanLy.Controllers
                 var nguoiDung = _context.NguoiDungs.SingleOrDefault(x => x.Id == id);
                 if (nguoiDung != null)
                 {
-                    _context.Remove(nguoiDung);
-                    _context.SaveChanges();
+                    var result = _context.Database.ExecuteSqlRaw($"deleteNguoiDung {id}");
                     return Ok(new
                     {
                         status = "success",

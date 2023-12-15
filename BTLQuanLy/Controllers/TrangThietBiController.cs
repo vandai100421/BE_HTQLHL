@@ -27,7 +27,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.TrangThietBis.Where(x => EF.Functions.Like(x.TenTTB, $"%{q ?? ""}%")).Count();
+                var total = _context.TotalTTBResponses.FromSqlRaw($"getTotalTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
                 return Ok(new
                 {
                     status = "success",
@@ -70,7 +70,7 @@ namespace BTLQuanLy.Controllers
                 return Ok(new
                 {
                     status = "success",
-                    message = "Cập nhật người dùng thành công",
+                    message = "Cập nhật trang thiết bị thành công",
                 });
             }
             catch
@@ -87,12 +87,11 @@ namespace BTLQuanLy.Controllers
                 var trangThietBi = _context.TrangThietBis.SingleOrDefault(x => x.Id == id);
                 if (trangThietBi != null)
                 {
-                    _context.Remove(trangThietBi);
-                    _context.SaveChanges();
+                    var result = _context.Database.ExecuteSqlRaw($"deleteTTB {id}");
                     return Ok(new
                     {
                         status = "success",
-                        message = "Xóa người dùng thành công"
+                        message = "Xóa trang thiết bị thành công"
                     });
                 }
                 else

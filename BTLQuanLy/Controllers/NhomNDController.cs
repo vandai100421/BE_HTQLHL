@@ -47,7 +47,8 @@ namespace BTLQuanLy.Controllers
             {
                 var nhomNguoiDung = new NhomNguoiDung
                 {
-                    TenNhomND = request.TenNhomND
+                    TenNhomND = request.TenNhomND,
+                    NhomQuyenId = request.NhomQuyenId
                 };
                 _context.NhomNguoiDungs.Add(nhomNguoiDung);
                 _context.SaveChanges();

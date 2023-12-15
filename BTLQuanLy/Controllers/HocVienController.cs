@@ -24,25 +24,6 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        //[Authorize]
-        public IActionResult GetAll([FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
-        {
-            try
-            {
-                var list = _context.HocVienResponses.FromSqlRaw($"getAllHocVien {limit}, {page}").ToList();
-                return Ok(new
-                {
-                    status = "success",
-                    data = list
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
         [HttpPost]
         //[Authorize]
         public IActionResult Create(HocVienRequest request)
@@ -53,7 +34,6 @@ namespace BTLQuanLy.Controllers
                 return Ok(new
                 {
                     status = "success",
-                    data = request,
                     message = "Thêm học viên thành công"
                 });
             }
@@ -130,8 +110,8 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.HocViens.Where(x => EF.Functions.Like(x.TenHocVien, $"%{q ?? ""}%")).Count();
+                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}, 0").ToList();
+                var total = _context.TotalHocVienResponses.FromSqlRaw($"getToTalHocVien N'{q ?? ""}', {limit}, {page}, 0").ToList()[0].Total;
                 return Ok(new
                 {  
                     status = "success",

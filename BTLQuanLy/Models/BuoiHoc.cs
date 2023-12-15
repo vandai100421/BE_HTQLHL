@@ -6,20 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable disable
 
-namespace BTLQuanLy.Response
+namespace BTLQuanLy.Models
 {
-    public partial class NguoiDungResponse
+    public partial class BuoiHoc
     {
         public int Id { get; set; }
-        public string TenNguoiDung { get; set; }
-        public string HoTen { get; set; }
-        public string Email { get; set; }
-        public int? VaiTro { get; set; }
-        public int? DonViId { get; set; }
+        public int? KeHoachId { get; set; }
+        public DateTime? ThoiGian { get; set; }
+        public int? ThuTu { get; set; }
         public DateTime? NgayTao { get; set; }
         public int? NguoiTao { get; set; }
         public DateTime? NgaySua { get; set; }
         public int? NguoiSua { get; set; }
-        public string TenDonVi { get; set; }
     }
 }
