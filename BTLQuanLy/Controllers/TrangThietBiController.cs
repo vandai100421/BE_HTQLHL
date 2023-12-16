@@ -22,12 +22,15 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
-                var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.TotalResponses.FromSqlRaw($"getTotalTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("role_").Value) == 1 ? 0 : Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalTrangThietBi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList()[0].Total;
                 return Ok(new
                 {
                     status = "success",
@@ -44,11 +47,21 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create(TrangThietBiRequest request)
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createTrangThietBi N'{request.TenTTB}', {request.CapDo}, {request.TinhTrang}, N'{request.MoTa}', N'{request.DiaDiem}', {request.DonViId}, 0, '{DateTime.Now}'");
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
+                var result = _context.Database.ExecuteSqlRaw($"createTrangThietBi N'{request.TenTTB}', {request.CapDo}, {request.TinhTrang}, N'{request.MoTa}', N'{request.DiaDiem}', {request.DonViId}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                 return Ok(new
                 {
                     status = "success",
@@ -66,12 +79,29 @@ namespace BTLQuanLy.Controllers
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"updateTrangThietBi {id}, N'{request.TenTTB}', {request.CapDo}, {request.TinhTrang}, N'{request.MoTa}', N'{request.DiaDiem}', {request.DonViId}, 0, '{DateTime.Now}'");
-                return Ok(new
+                var trangThietBi = _context.TrangThietBis.SingleOrDefault(x => x.Id == id);
+                if (trangThietBi != null)
                 {
-                    status = "success",
-                    message = "Cập nhật trang thiết bị thành công",
-                });
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == trangThietBi.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"updateTrangThietBi {id}, N'{request.TenTTB}', {request.CapDo}, {request.TinhTrang}, N'{request.MoTa}', N'{request.DiaDiem}', {request.DonViId}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Cập nhật trang thiết bị thành công",
+                    });
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch
             {
@@ -87,6 +117,15 @@ namespace BTLQuanLy.Controllers
                 var trangThietBi = _context.TrangThietBis.SingleOrDefault(x => x.Id == id);
                 if (trangThietBi != null)
                 {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == trangThietBi.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
                     var result = _context.Database.ExecuteSqlRaw($"deleteTTB {id}");
                     return Ok(new
                     {

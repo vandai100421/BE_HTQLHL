@@ -27,64 +27,129 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("searchLevelUpper")]
-        [Authorize]
+        [Authorize(Roles = "2")]
         public IActionResult SearchLevelUpper([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay??"0"}', '{endDay??"0"}'").ToList();
-            var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
-            return Ok(new
+            try
             {
-                status = "success",
-                data = list,
-                page,
-                limit,
-                total
-            });
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapTren {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapTren {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("searchLevelYourself")]
-        [Authorize]
+        [Authorize(Roles = "2")]
         public IActionResult SearchLevelYourself([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
-            var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
-            return Ok(new
+            try
             {
-                status = "success",
-                data = list,
-                page,
-                limit,
-                total
-            });
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapMinh {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapMinh {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
+            catch
+            {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapMinh {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapMinh {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
         }
 
         [HttpGet("searchLevelLower")]
-        [Authorize]
+        [Authorize(Roles = "2")]
         public IActionResult SearchLevelLower([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
-            System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-            var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
-            var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
-            var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
-            return Ok(new
+            try
             {
-                status = "success",
-                data = list,
-                page,
-                limit,
-                total
-            });
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapDuoi {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapDuoi {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpGet("search")]
+        [Authorize(Roles = "1")]
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay= "1975-11-19 19:54:41.1751275", [FromQuery(Name = "endDay")] string endDay= "2100-11-19 19:54:41.1751275", [FromQuery(Name = "donViId")] int donViId=0)
+        {
+            try
+            {
+                var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoach {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay}', '{endDay}'").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalKeHoach {donViId}, N'{q ?? ""}', {limit}, {page}, '{startDay}', '{endDay}'").ToList()[0].Total;
+                return Ok(new
+                {
+                    status = "success",
+                    data = list,
+                    page,
+                    limit,
+                    total
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Create([FromForm]KHHuanLuyenRequest request)
         {
             try
             {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
                 var link = "0";
                 if (request.Link !=null && request.Link.Length > 0)
                 {
@@ -94,8 +159,7 @@ namespace BTLQuanLy.Controllers
                         link = "/public/" + request.Link.FileName;
                     }
                 }
-                var result = _context.Database.ExecuteSqlRaw($"createKeHoach N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{link}', {request.SoBuoiHoc}, {request.SoGio}, {request.DonViId}");
-                _context.Database.ExecuteSqlRaw($"createBuoiHoc '{DateTime.Now}', 0");
+                var result = _context.Database.ExecuteSqlRaw($"createKeHoach '{request.MaKeHoach}', N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}', '{link}', {request.SoBuoiHoc}, {request.SoGio}, {request.DonViId}");
                 return Ok(new
                 {
                     status = "success",
@@ -109,6 +173,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public IActionResult Update(int id, [FromForm]KHHuanLuyenRequest request)
         {
             try
@@ -116,6 +181,15 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
                     var link = "0";
                     if (request.Link != null && request.Link.Length > 0)
                     {
@@ -125,7 +199,7 @@ namespace BTLQuanLy.Controllers
                             link = "/public/" + request.Link.FileName;
                         }
                     }
-                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  0, '{DateTime.Now}', '{link}'");
+                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, '{request.MaKeHoach}', N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}', '{link}'");
                     return Ok(new
                     {
                         status = "success",
@@ -145,6 +219,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try
@@ -152,6 +227,15 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == keHoach.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
                     var result = _context.Database.ExecuteSqlRaw($"deleteKeHoach {id}");
                     if (result == 1)
                     {

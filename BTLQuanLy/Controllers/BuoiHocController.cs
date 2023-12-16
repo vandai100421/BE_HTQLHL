@@ -58,6 +58,42 @@ namespace BTLQuanLy.Controllers
             }
         }
 
+        [HttpGet("CreateByKHId{id}")]
+        [Authorize]
+        public IActionResult CreateByKHId(int id)
+        {
+            try
+            {
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
+                if (keHoach != null)
+                {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"createBuoiHoc {id}, '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}");
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Tạo buổi học thành công",
+                    });
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpGet("GetAllByKHId/{id}")]
         [Authorize]
         public IActionResult GetAllByKHId(int id)

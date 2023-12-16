@@ -11,12 +11,15 @@ namespace BTLQuanLy.Models
     public partial class KHHuanLuyen
     {
         public int Id { get; set; }
+        public int MaKeHoach { get; set; }
         public string TenKeHoach { get; set; }
         public string Link { get; set; }
         public string NoiDung { get; set; }
         public int? DonViId { get; set; }
         public int? SoBuoiHoc { get; set; }
-        public int? SoGio { get; set; }
+        public int? SoTiet { get; set; }
+        public int? DaTaoBH { get; set; }
+        public int? DaTaoKQ { get; set; }
         public DateTime? ThoiGianBatDau { get; set; }
         public DateTime? ThoiGianKetThuc { get; set; }
         public DateTime? NgayTao { get; set; }

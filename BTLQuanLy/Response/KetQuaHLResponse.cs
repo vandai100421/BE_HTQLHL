@@ -13,6 +13,7 @@ namespace BTLQuanLy.Response
         public int Id { get; set; }
         public int? KeHoachId { get; set; }
         public int? HocVienId { get; set; }
+        public string TenHocVien { get; set; }
         //0: không đat, 1: đạt, 2: khá, 3: giỏi
         public int? KetQua { get; set; }
     }

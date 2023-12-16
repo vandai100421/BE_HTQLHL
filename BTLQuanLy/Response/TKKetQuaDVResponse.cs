@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 
 namespace BTLQuanLy.Response
 {
-    public class TKKetQuaResponse
+    public class TKKetQuaDVResponse
     {
         public int Id { get; set; }
         public int? DonViId { get; set; }
         public string TenDonVi { get; set; }
-        public int? HocVienId { get; set; }
-        public string TenHocVien { get; set; }
-        public int? KetQua { get; set; }
+        public int? KeHoachId { get; set; }
+        public string TenKeHoach { get; set; }
+        public int? SLKhongDat { get; set; }
+        public int? SLDat { get; set; }
+        public int? SLGioi { get; set; }
+        public int? SLXuatSac { get; set; }
+        public int? SLThamGia { get; set; }
     }
 }

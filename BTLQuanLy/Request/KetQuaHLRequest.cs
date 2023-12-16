@@ -10,7 +10,6 @@ namespace BTLQuanLy.Request
 {
     public class KetQuaHLRequest
     {
-        public int Id { get; set; }
         public int? KeHoachID { get; set; }
         public int? HocVienId { get; set; }
         public int? DonViId { get; set; }

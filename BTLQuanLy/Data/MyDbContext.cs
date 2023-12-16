@@ -51,7 +51,8 @@ namespace BTLQuanLy.Data
         public virtual DbSet<CheckRoleResponse> CheckRoleResponses { get; set; }
         public virtual DbSet<KetQuaHLResponse> KetQuaHLResponses { get; set; }
         public virtual DbSet<BH_HVResponse> BH_HVResponses { get; set; }
-        public virtual DbSet<ThongKeByDonViResponse> ThongKeByDonViResponses { get; set; }
-        public virtual DbSet<ThongKeByHocVienResponse> ThongKeByHocVienResponses { get; set; }
+        public virtual DbSet<TKChuyenCanResponse> TKChuyenCanResponses { get; set; }
+        public virtual DbSet<TKKetQuaResponse> TKKetQuaResponses { get; set; }
+        public virtual DbSet<TKKetQuaDVResponse> TKKetQuaDVResponses { get; set; }
     }
 }

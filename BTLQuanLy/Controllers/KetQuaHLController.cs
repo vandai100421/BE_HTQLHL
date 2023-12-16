@@ -51,27 +51,35 @@ namespace BTLQuanLy.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet("CreateByKHId/{id}")]
         [Authorize]
-        public IActionResult Create(KetQuaHLRequest request)
+        public IActionResult CreateByKHId(int id)
         {
             try
             {
                 System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
+                if (keHoach != null)
                 {
-                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {request.DonViId}").ToList()[0].IsRole;
-                    if (isRole == 0)
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
                     {
-                        return Unauthorized();
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == keHoach.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
                     }
+                    var result = _context.Database.ExecuteSqlRaw($"createKetQua {id}, '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}, {keHoach.DonViId}");
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Thêm kết quả thành công"
+                    });
                 }
-                var result = _context.Database.ExecuteSqlRaw($"createKetQua {request.KeHoachID}, {request.HocVienId}, {request.DonViId}, {request.KetQua}, 0, '{DateTime.Now}'");
-                return Ok(new
+                else
                 {
-                    status = "success",
-                    message = "Thêm kết quả thành công"
-                });
+                    return NotFound();
+                }
             }
             catch
             {
@@ -88,7 +96,16 @@ namespace BTLQuanLy.Controllers
                 var ketQua = _context.KetQuaHLs.SingleOrDefault(x => x.Id == id);
                 if (ketQua != null)
                 {
-                    var result = _context.Database.ExecuteSqlRaw($"updateKetQua {id}, {request.KeHoachID}, {request.HocVienId}, {request.DonViId}, {request.KetQua}, 0, '{DateTime.Now}'");
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"updateKetQua {id}, {request.KeHoachID}, {request.HocVienId}, {request.DonViId}, {request.KetQua}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                     return Ok(new
                     {
                         status = "success",
@@ -115,6 +132,15 @@ namespace BTLQuanLy.Controllers
                 var ketQua = _context.KetQuaHLs.SingleOrDefault(x => x.Id == id);
                 if (ketQua != null)
                 {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == ketQua.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
                     var result = _context.Database.ExecuteSqlRaw($"deleteKetQua {id}");
                     return Ok(new
                     {
