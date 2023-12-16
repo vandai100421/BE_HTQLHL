@@ -23,12 +23,14 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet()]
-        //[Authorize(Roles = "1")]
+        [Authorize]
         public IActionResult GetAll()
         {
             try
             {
-                var list = _context.DonVis.FromSqlRaw($"getAllDonViById 1").ToList()[0];
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("role_").Value) == 1 ? 0 : Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.DonVis.FromSqlRaw($"getAllDonViById {donViId}").ToList()[0];
                 return Ok(new
                 {
                     status = "success",
@@ -42,12 +44,21 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IActionResult Create(DonViRequest request)
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai}, 0, '{DateTime.Now}'");
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {request.DonViId}").ToList()[0].IsRole;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
+                var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                 if (result == 1)
                 {
                     return Ok(new
@@ -68,7 +79,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Update(int id, DonViRequest request)
         {
             try
@@ -76,7 +87,16 @@ namespace BTLQuanLy.Controllers
                 var donVi = _context.DonVis.SingleOrDefault(x => x.Id == id);
                 if (donVi != null)
                 {
-                    var result = _context.Database.ExecuteSqlRaw($"updateDonViById {id}, N'{request.TenDonVi}', '{request.NgayThanhLap}', '{request.NgayGiaiTan}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai}, 0, '{DateTime.Now}'");
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {request.DonViId}").ToList()[0].IsRole;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"updateDonViById {id}, N'{request.TenDonVi}', '{request.NgayThanhLap}', '{request.NgayGiaiTan}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai},{Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                     if (result == 1)
                     {
                         return Ok(new
@@ -102,7 +122,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try
@@ -110,6 +130,15 @@ namespace BTLQuanLy.Controllers
                 var donVi = _context.DonVis.SingleOrDefault(x => x.Id == id);
                 if (donVi != null)
                 {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {id}").ToList()[0].IsRole;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
                     var result = _context.Database.ExecuteSqlRaw($"deleteDonVi {id}");
                     if (result == 1)
                     {
@@ -136,12 +165,15 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "donViId")] int donViId=0)
+        [Authorize]
+        public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("role_").Value) == 1 ? 0 : Int32.Parse(currentUser.FindFirst("donViId").Value);
                 var list = _context.DonViResponses.FromSqlRaw($"searchDonVi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList();
-                var total = _context.TotalDonViResponses.FromSqlRaw($"getToTalDonVi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList()[0].Total;
+                var total = _context.TotalResponses.FromSqlRaw($"getToTalDonVi N'{q ?? ""}', {limit}, {page}, {donViId}").ToList()[0].Total;
                 return Ok(new
                 {
                     status = "success",

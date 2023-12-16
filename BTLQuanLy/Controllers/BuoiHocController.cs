@@ -1,5 +1,6 @@
 ﻿using BTLQuanLy.Data;
 using BTLQuanLy.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,18 +21,36 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpPut]
-        //[Authorize]
-        public IActionResult Update(BuoiHocRequest request)
+        [HttpPut("{id}")]
+        [Authorize]
+        public IActionResult Update(int id, BuoiHocRequest request)
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"updateBuoiHoc {request.KeHoachId}, '{request.ThoiGian}', {request.ThuTu}, '{DateTime.Now}', 0");
-                return Ok(new
+                var buoiHoc = _context.BuoiHocs.SingleOrDefault(x => x.Id == id);
+                if (buoiHoc != null)
                 {
-                    status = "success",
-                    message = "Cập nhật buổi học thành công",
-                });
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == request.KeHoachId);
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"updateBuoiHoc {id}, {request.KeHoachId}, '{request.ThoiGian}', {request.ThuTu}, '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}");
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Cập nhật buổi học thành công",
+                    });
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch
             {
@@ -40,12 +59,22 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("GetAllByKHId/{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAllByKHId(int id)
         {
             try
             {
-                var list = _context.BuoiHocs.Where(x=>x.KeHoachId==id).ToList();
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
+                var list = _context.BuoiHocs.FromSqlRaw($"getAllBuoiHoc {id}").ToList();
                 return Ok(new
                 {
                     status = "success",
@@ -59,17 +88,35 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"deleteBuoiHoc {id}");
-                return Ok(new
+                var buoiHoc = _context.BuoiHocs.SingleOrDefault(x => x.Id == id);
+                if (buoiHoc != null)
                 {
-                    status = "success",
-                    message = "Xóa buổi học thành công",
-                });
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == buoiHoc.KeHoachId);
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"deleteBuoiHoc {id}");
+                    return Ok(new
+                    {
+                        status = "success",
+                        message = "Xóa buổi học thành công",
+                    });
+                }
+                else
+                {
+                    return NotFound();
+                }
             }
             catch
             {

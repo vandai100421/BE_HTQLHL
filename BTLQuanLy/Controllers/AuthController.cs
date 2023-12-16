@@ -2,8 +2,10 @@
 using BTLQuanLy.Data;
 using BTLQuanLy.Models;
 using BTLQuanLy.Request;
+using BTLQuanLy.Response;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -28,7 +30,7 @@ namespace BTLQuanLy.Controllers
             _appSettings = optionsMonitor.CurrentValue;
         }
 
-        private string GenerateToken(NguoiDung nguoiDung)
+        private string GenerateToken(NguoiDungResponse nguoiDung)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var secretKeyBytes = Encoding.UTF8.GetBytes(_appSettings.SecretKey);
@@ -39,6 +41,8 @@ namespace BTLQuanLy.Controllers
                 {
                     new Claim("userId", nguoiDung.Id.ToString()),
                     new Claim("userName", nguoiDung.TenNguoiDung),
+                    new Claim("donViId", nguoiDung.DonViId.ToString()),
+                    new Claim("role_", nguoiDung.VaiTro.ToString()),
                     new Claim(ClaimTypes.Role, nguoiDung.VaiTro.ToString()),
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(60),
@@ -52,13 +56,16 @@ namespace BTLQuanLy.Controllers
         [HttpPost("login")]
         public IActionResult Login(LoginRequest request)
         {
-            var nguoiDung = _context.NguoiDungs.SingleOrDefault(x => x.TenNguoiDung == request.TenNguoiDung && x.MatKhau == Encryptor.MD5Hash(request.MatKhau));
-            if (nguoiDung != null)
+            var nguoiDung = _context.NguoiDungResponses.FromSqlRaw($"loginUser '{request.TenNguoiDung}', '{Encryptor.MD5Hash(request.MatKhau)}'").ToList();
+            if (nguoiDung.Count > 0)
             {
                 return Ok(new
                 {
                     status = "success",
-                    data = GenerateToken(nguoiDung),
+                    data = new {
+                        accessToken = GenerateToken(nguoiDung[0]),
+                        user = nguoiDung[0]
+                    },
                     message = "Đăng nhập thành công"
                 });
             }

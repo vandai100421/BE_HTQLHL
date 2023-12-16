@@ -1,5 +1,6 @@
 ﻿using BTLQuanLy.Data;
 using BTLQuanLy.Request;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -18,13 +19,23 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "keHoachId")] int keHoachId)
         {
             try
             {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == keHoachId);
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
                 var list = _context.KetQuaHLResponses.FromSqlRaw($"searchKetQua N'{q ?? ""}', {limit}, {page}, {keHoachId}").ToList();
-                var total = _context.TotalKQResponses.FromSqlRaw($"getTotalKetQua N'{q ?? ""}', {limit}, {page}, {keHoachId}").ToList()[0].Total;
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalKetQua N'{q ?? ""}', {limit}, {page}, {keHoachId}").ToList()[0].Total;
                 return Ok(new
                 {
                     status = "success",
@@ -41,11 +52,20 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IActionResult Create(KetQuaHLRequest request)
         {
             try
             {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {request.DonViId}").ToList()[0].IsRole;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
                 var result = _context.Database.ExecuteSqlRaw($"createKetQua {request.KeHoachID}, {request.HocVienId}, {request.DonViId}, {request.KetQua}, 0, '{DateTime.Now}'");
                 return Ok(new
                 {
@@ -60,7 +80,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Update(int id, KetQuaHLRequest request)
         {
             try
@@ -87,7 +107,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try

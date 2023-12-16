@@ -27,7 +27,7 @@ namespace BTLQuanLy.Controllers
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             var list = _context.NguoiDungResponses.FromSqlRaw($"searchNguoiDung N'{q ?? ""}', {limit}, {page}").ToList();
-            var total = _context.TotalNguoiDungResponses.FromSqlRaw($"getTotalNguoiDung N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
+            var total = _context.TotalResponses.FromSqlRaw($"getTotalNguoiDung N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",

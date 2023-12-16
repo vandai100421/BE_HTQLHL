@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace BTLQuanLy.Response
 {
-    public class TotalKQResponse
+    public class CheckRoleResponse
     {
         public int Id { get; set; }
-        public int Total { get; set; }
+        public int IsRole { get; set; }
     }
 }

@@ -34,7 +34,6 @@ namespace BTLQuanLy.Data
         public virtual DbSet<NguoiDungResponse> NguoiDungResponses { get; set; }
         public virtual DbSet<TrangThietBiResponse> TrangThietBiResponses { get; set; }
         public virtual DbSet<KHHuanLuyenResponse> KHHuanLuyenResponses { get; set; }
-        public virtual DbSet<TotalKHResponse> TotalKHResponses { get; set; }
         public virtual DbSet<NhanKeHoachResponse> NhanKeHoachResponses { get; set; }
         public virtual DbSet<Quyen> Quyens { get; set; }
         public virtual DbSet<NhomQuyenQuyen> NhomQuyenQuyens { get; set; }
@@ -48,13 +47,10 @@ namespace BTLQuanLy.Data
         public virtual DbSet<BuoiHoc> BuoiHocs { get; set; }
         public virtual DbSet<HV_TTB> HV_TTBs { get; set; }
         public virtual DbSet<KetQuaHL> KetQuaHLs { get; set; }
-        public virtual DbSet<TotalDonViResponse> TotalDonViResponses { get; set; }
-        public virtual DbSet<TotalHocVienResponse> TotalHocVienResponses { get; set; }
+        public virtual DbSet<TotalResponse> TotalResponses { get; set; }
+        public virtual DbSet<CheckRoleResponse> CheckRoleResponses { get; set; }
         public virtual DbSet<KetQuaHLResponse> KetQuaHLResponses { get; set; }
-        public virtual DbSet<TotalKQResponse> TotalKQResponses { get; set; }
         public virtual DbSet<BH_HVResponse> BH_HVResponses { get; set; }
-        public virtual DbSet<TotalNguoiDungResponse> TotalNguoiDungResponses { get; set; }
-        public virtual DbSet<TotalTTBResponse> TotalTTBResponses { get; set; }
         public virtual DbSet<ThongKeByDonViResponse> ThongKeByDonViResponses { get; set; }
         public virtual DbSet<ThongKeByHocVienResponse> ThongKeByHocVienResponses { get; set; }
     }

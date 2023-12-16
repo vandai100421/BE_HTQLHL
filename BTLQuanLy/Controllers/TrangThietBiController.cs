@@ -27,7 +27,7 @@ namespace BTLQuanLy.Controllers
             try
             {
                 var list = _context.TrangThietBiResponses.FromSqlRaw($"searchTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList();
-                var total = _context.TotalTTBResponses.FromSqlRaw($"getTotalTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
+                var total = _context.TotalResponses.FromSqlRaw($"getTotalTrangThietBi N'{q ?? ""}', {limit}, {page}").ToList()[0].Total;
                 return Ok(new
                 {
                     status = "success",

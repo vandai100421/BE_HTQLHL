@@ -33,7 +33,7 @@ namespace BTLQuanLy.Controllers
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
             var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay??"0"}', '{endDay??"0"}'").ToList();
-            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKHCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+            var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapTren {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",
@@ -51,7 +51,7 @@ namespace BTLQuanLy.Controllers
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
             var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
-            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKHCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+            var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapMinh {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",
@@ -69,7 +69,7 @@ namespace BTLQuanLy.Controllers
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
             var user = _context.NguoiDungs.SingleOrDefault(x => x.Id == Int32.Parse(currentUser.FindFirst("userId").Value));
             var list = _context.KHHuanLuyenResponses.FromSqlRaw($"searchKeHoachCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList();
-            var total = _context.TotalKHResponses.FromSqlRaw($"getTotalKHCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
+            var total = _context.TotalResponses.FromSqlRaw($"getTotalKHCapDuoi {user.DonViId}, N'{q ?? ""}', {limit}, {page}, '{startDay ?? "0"}', '{endDay ?? "0"}'").ToList()[0].Total;
             return Ok(new
             {
                 status = "success",

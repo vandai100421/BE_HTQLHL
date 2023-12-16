@@ -1,4 +1,5 @@
 ﻿using BTLQuanLy.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,20 +21,36 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("GetAllByKHId/{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAllByKHId(int id)
         {
-            var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
-            var list = _context.BH_HVResponses.FromSqlRaw($"getBH_HVByKHId {id}").ToList();
-            return Ok(new
+            try
             {
-                status = "success",
-                data = new
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
                 {
-                    soBuoiHoc = keHoach.SoBuoiHoc,
-                    detail = list,
+                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
                 }
-            });
+                var list = _context.BH_HVResponses.FromSqlRaw($"getBH_HVByKHId {id}").ToList();
+                return Ok(new
+                {
+                    status = "success",
+                    data = new
+                    {
+                        soBuoiHoc = keHoach.SoBuoiHoc,
+                        detail = list,
+                    }
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
     }
 }

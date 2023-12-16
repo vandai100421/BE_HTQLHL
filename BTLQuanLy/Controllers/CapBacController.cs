@@ -20,7 +20,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAll()
         {
             try

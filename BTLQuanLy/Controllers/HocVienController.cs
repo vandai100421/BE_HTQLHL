@@ -25,12 +25,21 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         public IActionResult Create(HocVienRequest request)
         {
             try
             {
-                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value)==request.DonViId?1:0;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
+                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
                 return Ok(new
                 {
                     status = "success",
@@ -44,7 +53,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpPut("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Update(int id, HocVienRequest request)
         {
             try
@@ -52,7 +61,16 @@ namespace BTLQuanLy.Controllers
                 var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
-                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', 0, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
+                    var result = _context.Database.ExecuteSqlRaw($"updateHocVienById {id}, N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
                     return Ok(new
                     {
                         status = "success",
@@ -71,7 +89,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpDelete("{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             try
@@ -79,6 +97,15 @@ namespace BTLQuanLy.Controllers
                 var hocVien = _context.HocViens.SingleOrDefault(x => x.Id == id);
                 if (hocVien != null)
                 {
+                    System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                    if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                    {
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == hocVien.DonViId ? 1 : 0;
+                        if (isRole == 0)
+                        {
+                            return Unauthorized();
+                        }
+                    }
                     var result = _context.Database.ExecuteSqlRaw($"deleteHocVien {id}");
                     if (result == 1)
                     {
@@ -105,13 +132,15 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        //[Authorize]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page)
         {
             try
             {
-                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}, 0").ToList();
-                var total = _context.TotalHocVienResponses.FromSqlRaw($"getToTalHocVien N'{q ?? ""}', {limit}, {page}, 0").ToList()[0].Total;
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var donViId = Int32.Parse(currentUser.FindFirst("role_").Value) == 1 ? 0 : Int32.Parse(currentUser.FindFirst("donViId").Value);
+                var list = _context.HocVienResponses.FromSqlRaw($"searchHocVien N'{q ?? ""}', {limit}, {page}, {donViId}").ToList();
+                var total = _context.TotalResponses.FromSqlRaw($"getToTalHocVien N'{q ?? ""}', {limit}, {page}, {donViId}").ToList()[0].Total;
                 return Ok(new
                 {  
                     status = "success",
