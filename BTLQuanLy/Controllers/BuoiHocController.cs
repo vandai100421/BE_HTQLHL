@@ -58,7 +58,7 @@ namespace BTLQuanLy.Controllers
             }
         }
 
-        [HttpGet("CreateByKHId{id}")]
+        [HttpGet("CreateByKHId/{id}")]
         [Authorize]
         public IActionResult CreateByKHId(int id)
         {
@@ -67,6 +67,10 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
+                    if (keHoach.DaTaoBH == 1)
+                    {
+                        return BadRequest();
+                    }
                     System.Security.Claims.ClaimsPrincipal currentUser = this.User;
                     if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
                     {

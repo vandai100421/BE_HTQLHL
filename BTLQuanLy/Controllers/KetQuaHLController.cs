@@ -63,6 +63,10 @@ namespace BTLQuanLy.Controllers
                 var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == id);
                 if (keHoach != null)
                 {
+                    if (keHoach.DaTaoKQ == 1)
+                    {
+                        return BadRequest();
+                    }
                     if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
                     {
                         var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == keHoach.DonViId ? 1 : 0;
