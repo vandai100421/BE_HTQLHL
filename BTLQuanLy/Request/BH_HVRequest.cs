@@ -15,7 +15,7 @@ namespace BTLQuanLy.Request
 
     public class Detail
     {
-        public int? BuoiHocId { get; set; }
+        public int? BH_HVId { get; set; }
         public int? CoMat { get; set; }
     }
 }
