@@ -137,7 +137,7 @@ namespace BTLQuanLy.Controllers
 
         [HttpPost]
         [Authorize]
-        public IActionResult Create([FromForm]KHHuanLuyenRequest request)
+        public IActionResult Create(KHHuanLuyenRequest request)
         {
             try
             {
@@ -150,16 +150,7 @@ namespace BTLQuanLy.Controllers
                         return Unauthorized();
                     }
                 }
-                var link = "0";
-                if (request.Link !=null && request.Link.Length > 0)
-                {
-                    using(FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
-                    {
-                        request.Link.CopyTo(filestream);
-                        link = "/public/" + request.Link.FileName;
-                    }
-                }
-                var result = _context.Database.ExecuteSqlRaw($"createKeHoach '{request.MaKeHoach}', N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}', '{link}', {request.SoBuoiHoc}, {request.SoGio}, {request.DonViId}");
+                var result = _context.Database.ExecuteSqlRaw($"createKeHoach '{request.MaKeHoach}', N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}', {request.SoBuoiHoc}, {request.SoTiet}, {request.DonViId}");
                 return Ok(new
                 {
                     status = "success",
@@ -174,7 +165,7 @@ namespace BTLQuanLy.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public IActionResult Update(int id, [FromForm]KHHuanLuyenRequest request)
+        public IActionResult Update(int id, KHHuanLuyenRequest request)
         {
             try
             {
@@ -190,16 +181,7 @@ namespace BTLQuanLy.Controllers
                             return Unauthorized();
                         }
                     }
-                    var link = "0";
-                    if (request.Link != null && request.Link.Length > 0)
-                    {
-                        using (FileStream filestream = System.IO.File.Create(_webHostEnvironment.WebRootPath + "\\public\\" + request.Link.FileName))
-                        {
-                            request.Link.CopyTo(filestream);
-                            link = "/public/" + request.Link.FileName;
-                        }
-                    }
-                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, '{request.MaKeHoach}', N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}', '{link}'");
+                    var result = _context.Database.ExecuteSqlRaw($"updateKeHoach {id}, '{request.MaKeHoach}', N'{request.TenKeHoach}', N'{request.NoiDung}', '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}',  {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                     return Ok(new
                     {
                         status = "success",

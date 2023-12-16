@@ -11,9 +11,9 @@ namespace BTLQuanLy.Models
     public partial class KHHuanLuyen
     {
         public int Id { get; set; }
-        public int MaKeHoach { get; set; }
+        public string MaKeHoach { get; set; }
         public string TenKeHoach { get; set; }
-        public string Link { get; set; }
+        //public string Link { get; set; }
         public string NoiDung { get; set; }
         public int? DonViId { get; set; }
         public int? SoBuoiHoc { get; set; }

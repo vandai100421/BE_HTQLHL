@@ -13,9 +13,11 @@ namespace BTLQuanLy.Response
         public int Id { get; set; }
         public int MaKeHoach { get; set; }
         public string TenKeHoach { get; set; }
-        public string Link { get; set; }
+        //public string Link { get; set; }
         public string NoiDung { get; set; }
         public string TenNguoiLap { get; set; }
+        public int? SoTiet { get; set; }
+        public int? SoBuoiHoc { get; set; }
         public DateTime? ThoiGianBatDau { get; set; }
         public DateTime? ThoiGianKetThuc { get; set; }
         public int? DaTaoBH { get; set; }
