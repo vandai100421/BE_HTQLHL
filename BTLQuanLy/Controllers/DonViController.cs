@@ -30,7 +30,7 @@ namespace BTLQuanLy.Controllers
             {
                 System.Security.Claims.ClaimsPrincipal currentUser = this.User;
                 var donViId = Int32.Parse(currentUser.FindFirst("role_").Value) == 1 ? 0 : Int32.Parse(currentUser.FindFirst("donViId").Value);
-                var list = _context.DonVis.FromSqlRaw($"getAllDonViById {donViId}").ToList();
+                var list = _context.DonVis.FromSqlRaw($"getAllDonViById 0").ToList();
                 return Ok(new
                 {
                     status = "success",
