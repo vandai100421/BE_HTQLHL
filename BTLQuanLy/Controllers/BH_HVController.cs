@@ -1,4 +1,5 @@
 ﻿using BTLQuanLy.Data;
+using BTLQuanLy.Request;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +46,38 @@ namespace BTLQuanLy.Controllers
                         soBuoiHoc = keHoach.SoBuoiHoc,
                         detail = list,
                     }
+                });
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut()]
+        [Authorize]
+        public IActionResult Update(BH_HVRequest request)
+        {
+            try
+            {
+                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == request.KeHoachId);
+                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
+                {
+                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoach.DonViId}").ToList()[0].IsRole;
+                    if (isRole == 0)
+                    {
+                        return Unauthorized();
+                    }
+                }
+                foreach(var item in request.Details)
+                {
+                    _context.Database.ExecuteSqlRaw($"updateBH_HV {item.BuoiHocId}, {item.CoMat}");
+                }
+                return Ok(new
+                {
+                    status = "success",
+                    message = "Cập nhật thành công"
                 });
             }
             catch
