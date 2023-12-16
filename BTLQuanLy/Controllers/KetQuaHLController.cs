@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 
 namespace BTLQuanLy.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class KetQuaHLController : Controller
     {
         private MyDbContext _context;

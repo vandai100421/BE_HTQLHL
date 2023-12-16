@@ -11,7 +11,7 @@ namespace BTLQuanLy.Response
     public partial class KHHuanLuyenResponse
     {
         public int Id { get; set; }
-        public int MaKeHoach { get; set; }
+        public string MaKeHoach { get; set; }
         public string TenKeHoach { get; set; }
         //public string Link { get; set; }
         public string NoiDung { get; set; }
