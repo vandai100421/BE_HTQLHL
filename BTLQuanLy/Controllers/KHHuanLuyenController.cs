@@ -175,7 +175,7 @@ namespace BTLQuanLy.Controllers
                     System.Security.Claims.ClaimsPrincipal currentUser = this.User;
                     if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
                     {
-                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == keHoach.DonViId ? 1 : 0;
                         if (isRole == 0)
                         {
                             return Unauthorized();
