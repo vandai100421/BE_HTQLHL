@@ -111,7 +111,7 @@ namespace BTLQuanLy.Controllers
                             return Unauthorized();
                         }
                     }
-                    var result = _context.Database.ExecuteSqlRaw($"updateKetQua {id}, {request.KeHoachID}, {request.HocVienId}, {request.DonViId}, {request.KetQua}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
+                    var result = _context.Database.ExecuteSqlRaw($"updateKetQua {id}, {request.KetQua}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                     return Ok(new
                     {
                         status = "success",
