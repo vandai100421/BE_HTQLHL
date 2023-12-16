@@ -39,7 +39,7 @@ namespace BTLQuanLy.Controllers
                         return Unauthorized();
                     }
                 }
-                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}, {request.DonViId}, {request.KhoaHoc}, {request.ThoiGianBatDau}, {request.ThoiGianKetThuc}, {request.LoaiHocVien}");
+                var result = _context.Database.ExecuteSqlRaw($"createHocVien N'{request.TenHocVien}', '{request.NgaySinh}', {request.CapBacId}, {request.ChucVuId}, {request.GioiTinh}, N'{request.QueQuan}', '{request.SoDienThoai}', '{DateTime.Now}', {Int32.Parse(currentUser.FindFirst("userId").Value)}, {request.DonViId}, {request.KhoaHoc}, '{request.ThoiGianBatDau}', '{request.ThoiGianKetThuc}', {request.LoaiHocVien}");
                 return Ok(new
                 {
                     status = "success",
