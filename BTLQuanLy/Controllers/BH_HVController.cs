@@ -72,7 +72,7 @@ namespace BTLQuanLy.Controllers
                 }
                 foreach(var item in request.Details)
                 {
-                    _context.Database.ExecuteSqlRaw($"updateBH_HV {item.BH_HVId}, {item.CoMat}");
+                    _context.Database.ExecuteSqlRaw($"updateBH_HV {item.BuoiHocId}, {item.HocVienId}, {item.CoMat}");
                 }
                 return Ok(new
                 {
