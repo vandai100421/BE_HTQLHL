@@ -22,12 +22,13 @@ namespace BTLQuanLy.Controllers
 
         [HttpGet("GetChuyenCanByLevelLower")]
         [Authorize]
-        public IActionResult GetChuyenCanByDonViLevelLower()
+        public IActionResult GetChuyenCanByDonViLevelLower([FromQuery(Name = "donViId")] int id=0)
         {
             try
             {
                 System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {Int32.Parse(currentUser.FindFirst("donViId").Value)}");
+                var donViId = id == 0 ? Int32.Parse(currentUser.FindFirst("donViId").Value):id;
+                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {donViId}");
                 return Ok(new
                 {
                     status = "success",
@@ -42,12 +43,13 @@ namespace BTLQuanLy.Controllers
 
         [HttpGet("GetKTDVByLevelLower")]
         [Authorize]
-        public IActionResult GetKTDVByDonViLevelLower()
+        public IActionResult GetKTDVByDonViLevelLower([FromQuery(Name = "donViId")] int id = 0)
         {
             try
             {
                 System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                var list = _context.TKKetQuaDVResponses.FromSqlRaw($"getTKKetQuaDV {Int32.Parse(currentUser.FindFirst("donViId").Value)}");
+                var donViId = id == 0 ? Int32.Parse(currentUser.FindFirst("donViId").Value) : id;
+                var list = _context.TKKetQuaDVResponses.FromSqlRaw($"getTKKetQuaDV {donViId}");
                 return Ok(new
                 {
                     status = "success",
