@@ -9,7 +9,7 @@ namespace BTLQuanLy.Response
 {
     public class TKKetQuaDVResponse
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int? DonViId { get; set; }
         public string TenDonVi { get; set; }
         public int? KeHoachId { get; set; }
