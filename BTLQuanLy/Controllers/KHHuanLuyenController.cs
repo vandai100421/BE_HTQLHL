@@ -27,7 +27,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("searchLevelUpper")]
-        [Authorize(Roles = "2")]
+        [Authorize]
         public IActionResult SearchLevelUpper([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
             try
@@ -52,7 +52,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("searchLevelYourself")]
-        [Authorize(Roles = "2")]
+        [Authorize]
         public IActionResult SearchLevelYourself([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
             try
@@ -88,7 +88,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("searchLevelLower")]
-        [Authorize(Roles = "2")]
+        [Authorize]
         public IActionResult SearchLevelLower([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay, [FromQuery(Name = "endDay")] string endDay)
         {
             try
@@ -113,7 +113,7 @@ namespace BTLQuanLy.Controllers
         }
 
         [HttpGet("search")]
-        [Authorize(Roles = "1")]
+        [Authorize]
         public IActionResult Search([FromQuery(Name = "q")] string q, [FromQuery(Name = "limit")] int limit, [FromQuery(Name = "page")] int page, [FromQuery(Name = "startDay")] string startDay= "1975-11-19 19:54:41.1751275", [FromQuery(Name = "endDay")] string endDay= "2100-11-19 19:54:41.1751275", [FromQuery(Name = "donViId")] int donViId=0)
         {
             try
