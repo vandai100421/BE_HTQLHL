@@ -93,25 +93,28 @@ namespace BTLQuanLy.Controllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut()]
         [Authorize]
-        public IActionResult Update(int id, KetQuaHLRequest request)
+        public IActionResult Update(KetQuaHLRequest request)
         {
             try
             {
-                var ketQua = _context.KetQuaHLs.SingleOrDefault(x => x.Id == id);
-                if (ketQua != null)
+                var keHoach = _context.KHHuanLuyens.SingleOrDefault(x => x.Id == request.KeHoachID);
+                if (keHoach != null)
                 {
                     System.Security.Claims.ClaimsPrincipal currentUser = this.User;
                     if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
                     {
-                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == request.DonViId ? 1 : 0;
+                        var isRole = Int32.Parse(currentUser.FindFirst("donViId").Value) == keHoach.DonViId ? 1 : 0;
                         if (isRole == 0)
                         {
                             return Unauthorized();
                         }
                     }
-                    var result = _context.Database.ExecuteSqlRaw($"updateKetQua {id}, {request.KetQua}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
+                    foreach(var item in request.Details)
+                    {
+                        _context.Database.ExecuteSqlRaw($"updateKetQua {item.KetQuaId}, {item.KetQua}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
+                    }
                     return Ok(new
                     {
                         status = "success",

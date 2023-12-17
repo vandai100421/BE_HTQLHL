@@ -11,8 +11,12 @@ namespace BTLQuanLy.Request
     public class KetQuaHLRequest
     {
         public int? KeHoachID { get; set; }
-        public int? HocVienId { get; set; }
-        public int? DonViId { get; set; }
+        public List<DetailKQ> Details { get; set; }
+    }
+
+    public class DetailKQ
+    {
+        public int? KetQuaId { get; set; }
         //0: không đat, 1: đạt, 2: khá, 3: giỏi
         public int? KetQua { get; set; }
     }
