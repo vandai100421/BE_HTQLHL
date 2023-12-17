@@ -12,6 +12,8 @@ namespace BTLQuanLy.Response
         public int Id { get; set; }
         public int? DonViId { get; set; }
         public string TenDonVi { get; set; }
+        public int? KeHoachId { get; set; }
+        public string TenKeHoach { get; set; }
         public int? HocVienId { get; set; }
         public string TenHocVien { get; set; }
         public int? ChuyenCan { get; set; }

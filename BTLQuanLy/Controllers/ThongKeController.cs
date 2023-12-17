@@ -20,77 +20,9 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpGet("GetKTLevelYourself/{id}")]
-        [Authorize]
-        public IActionResult GetByDonViLevelYourself([FromQuery(Name = "keHoachId")] string keHoachId)
-        {
-            try
-            {
-                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                var list = _context.TKKetQuaResponses.FromSqlRaw($"getTKKetQua {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoachId}");
-                return Ok(new
-                {
-                    status = "success",
-                    data = list,
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("GetKTLevelLower/{id}")]
-        [Authorize]
-        public IActionResult GetKTLevelLower(int id, [FromQuery(Name = "keHoachId")] string keHoachId)
-        {
-            try
-            {
-                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
-                {
-                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {id}").ToList()[0].IsRole;
-                    if (isRole == 0)
-                    {
-                        return Unauthorized();
-                    }
-                }
-                var list = _context.TKKetQuaResponses.FromSqlRaw($"getTKKetQua {id}, {keHoachId}");
-                return Ok(new
-                {
-                    status = "success",
-                    data = list,
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
-        [HttpGet("GetChuyenCanByLevelYourself")]
-        [Authorize]
-        public IActionResult GetChuyenCanByLevelYourself([FromQuery(Name = "keHoachId")] string keHoachId)
-        {
-            try
-            {
-                System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {keHoachId}");
-                return Ok(new
-                {
-                    status = "success",
-                    data = list,
-                });
-            }
-            catch
-            {
-                return BadRequest();
-            }
-        }
-
         [HttpGet("GetChuyenCanByLevelLower/{id}")]
         [Authorize]
-        public IActionResult GetChuyenCanByDonViLevelLower(int id, [FromQuery(Name = "keHoachId")] string keHoachId)
+        public IActionResult GetChuyenCanByDonViLevelLower(int id)
         {
             try
             {
@@ -103,7 +35,7 @@ namespace BTLQuanLy.Controllers
                         return Unauthorized();
                     }
                 }
-                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {id}, {keHoachId}");
+                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {id}");
                 return Ok(new
                 {
                     status = "success",
@@ -118,7 +50,7 @@ namespace BTLQuanLy.Controllers
 
         [HttpGet("GetKTDVByLevelLower/{id}")]
         [Authorize]
-        public IActionResult GetKTDVByDonViLevelLower(int id, [FromQuery(Name = "keHoachId")] string keHoachId)
+        public IActionResult GetKTDVByDonViLevelLower(int id)
         {
             try
             {
