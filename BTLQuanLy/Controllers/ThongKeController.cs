@@ -20,22 +20,14 @@ namespace BTLQuanLy.Controllers
             _context = context;
         }
 
-        [HttpGet("GetChuyenCanByLevelLower/{id}")]
+        [HttpGet("GetChuyenCanByLevelLower")]
         [Authorize]
-        public IActionResult GetChuyenCanByDonViLevelLower(int id)
+        public IActionResult GetChuyenCanByDonViLevelLower()
         {
             try
             {
                 System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
-                {
-                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {id}").ToList()[0].IsRole;
-                    if (isRole == 0)
-                    {
-                        return Unauthorized();
-                    }
-                }
-                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {id}");
+                var list = _context.TKChuyenCanResponses.FromSqlRaw($"getTKChuyenCan {Int32.Parse(currentUser.FindFirst("donViId").Value)}");
                 return Ok(new
                 {
                     status = "success",
@@ -48,22 +40,14 @@ namespace BTLQuanLy.Controllers
             }
         }
 
-        [HttpGet("GetKTDVByLevelLower/{id}")]
+        [HttpGet("GetKTDVByLevelLower")]
         [Authorize]
-        public IActionResult GetKTDVByDonViLevelLower(int id)
+        public IActionResult GetKTDVByDonViLevelLower()
         {
             try
             {
                 System.Security.Claims.ClaimsPrincipal currentUser = this.User;
-                if (Int32.Parse(currentUser.FindFirst("role_").Value) == 2)
-                {
-                    var isRole = _context.CheckRoleResponses.FromSqlRaw($"checkRole {Int32.Parse(currentUser.FindFirst("donViId").Value)}, {id}").ToList()[0].IsRole;
-                    if (isRole == 0)
-                    {
-                        return Unauthorized();
-                    }
-                }
-                var list = _context.TKKetQuaDVResponses.FromSqlRaw($"getTKKetQuaDV {id}");
+                var list = _context.TKKetQuaDVResponses.FromSqlRaw($"getTKKetQuaDV {Int32.Parse(currentUser.FindFirst("donViId").Value)}");
                 return Ok(new
                 {
                     status = "success",
