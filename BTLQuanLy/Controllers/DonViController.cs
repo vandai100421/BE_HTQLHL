@@ -58,7 +58,7 @@ namespace BTLQuanLy.Controllers
                         return Unauthorized();
                     }
                 }
-                var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
+                var result = _context.Database.ExecuteSqlRaw($"createDonVi N'{request.TenDonVi}', '{request.NgayThanhLap}', {request.DonViId}, {request.LoaiDonViId}, NULL, {request.TrangThai}, {Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                 if (result == 1)
                 {
                     return Ok(new
@@ -96,7 +96,7 @@ namespace BTLQuanLy.Controllers
                             return Unauthorized();
                         }
                     }
-                    var result = _context.Database.ExecuteSqlRaw($"updateDonViById {id}, N'{request.TenDonVi}', '{request.NgayThanhLap}', '{request.NgayGiaiTan}', {request.DonViId}, {request.LoaiDonViId}, {request.CapDonViId}, {request.TrangThai},{Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
+                    var result = _context.Database.ExecuteSqlRaw($"updateDonViById {id}, N'{request.TenDonVi}', '{request.NgayThanhLap}', '{request.NgayGiaiTan}', {request.DonViId}, {request.LoaiDonViId}, NULL, {request.TrangThai},{Int32.Parse(currentUser.FindFirst("userId").Value)}, '{DateTime.Now}'");
                     if (result == 1)
                     {
                         return Ok(new
